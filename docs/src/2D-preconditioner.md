@@ -1,5 +1,22 @@
 # Augmented formulation
 
+```@setup main
+using MINPACK
+function fsolve(f, j, x; kwargs...)
+    try
+        MINPACK.fsolve(f, j, x; kwargs...)
+    catch e
+        println("Erreur using MINPACK")
+        println(e)
+        println("hybrj not supported. Replaced by hybrd even if it is not visible on the doc.")
+        MINPACK.fsolve(f, x; kwargs...)
+    end
+end
+function fsolve(f, x; kwargs...)
+    MINPACK.fsolve(f, x; kwargs...)
+end
+```
+
 We consider the augmented formulation of the same problem as before
 
 ```math

@@ -1,5 +1,22 @@
 # Indirect method
 
+```@setup main
+using MINPACK
+function fsolve(f, j, x; kwargs...)
+    try
+        MINPACK.fsolve(f, j, x; kwargs...)
+    catch e
+        println("Erreur using MINPACK")
+        println(e)
+        println("hybrj not supported. Replaced by hybrd even if it is not visible on the doc.")
+        MINPACK.fsolve(f, x; kwargs...)
+    end
+end
+function fsolve(f, x; kwargs...)
+    MINPACK.fsolve(f, x; kwargs...)
+end
+```
+
 We introduce the pseudo-Hamiltonian 
 
 ```math
@@ -39,23 +56,6 @@ end
 nothing # hide
 ```
 
-```@setup main
-using MINPACK
-function fsolve(f, j, x; kwargs...)
-    try
-        MINPACK.fsolve(f, j, x; kwargs...)
-    catch e
-        println("Erreur using MINPACK")
-        println(e)
-        println("hybrj not supported. Replaced by hybrd even if it is not visible on the doc.")
-        MINPACK.fsolve(f, x; kwargs...)
-    end
-end
-function fsolve(f, x; kwargs...)
-    MINPACK.fsolve(f, x; kwargs...)
-end
-```
-
 Thanks to the control-toolbox, the flow $\varphi$ of the (true) Hamiltonian
 
 ```math
@@ -75,7 +75,7 @@ Thanks to the control-toolbox, the flow $\varphi$ of the (true) Hamiltonian
 π((x,p)) = x;                                               # projection on state space
 
 S(p0) = π( ϕ(t0, x0, p0, tf) ) - xf;                        # shooting function
-nle = p0 -> [S(p0[1])]                                      # intermediate function
+nle = p0 -> [S(p0[1])]                                      # auxiliary function
 
 # Plot
 plot(range(-7, 2, 500), S, xlim = [-7, 2])
@@ -89,7 +89,7 @@ The main goal now is to find the zero of $S$. To this purpose, we use the numeri
 
 ```@example main
 ξ = [-1.0]                                                  # initial guess
-S!(s, ξ) = (s[:] .= S(ξ[1]); nothing)                       # intermediate function
+S!(s, ξ) = (s[:] .= S(ξ[1]); nothing)                       # auxiliary function
 p0_sol = fsolve(S!, ξ, show_trace = true)                   # solve
 println(p0_sol)
 ```
@@ -166,7 +166,7 @@ println("JS(ξ) : ", JS(ξ)[1])
 However, the solver $\texttt{hybrd1}$ uses rank 1 approximations to actualize the Jacobian insted of compute it at each iteration, which imply that it still converges to the solution even if the given Jacobian is completely false.
 
 ```@example main
-JS!(js, ξ) = (js[:] .= JS(ξ); nothing)                      # intermediate function
+JS!(js, ξ) = (js[:] .= JS(ξ); nothing)                      # auxiliary function
 p0_sol = fsolve(S!, JS!, ξ, show_trace = true)              # solve
 println(p0_sol)
 ```
@@ -271,8 +271,8 @@ Shoot(p0) =  π( φ(t0, x0, p0, tf) ) - xf                    # shooting functio
 JShoot(ξ) = ForwardDiff.jacobian(p -> [Shoot(p[1])], ξ)     # compute jacobian by forward differentiation
 println("ξ = ", ξ[1])
 println("JS(ξ) : ", JShoot(ξ)[1])
-Shoot!(shoot, ξ) = (shoot[:] .= Shoot(ξ[1]); nothing)       # intermediate function
-JShoot!(jshoot, ξ) = (jshoot[:] .= JShoot(ξ); nothing)      # intermediate function
+Shoot!(shoot, ξ) = (shoot[:] .= Shoot(ξ[1]); nothing)       # auxiliary function
+JShoot!(jshoot, ξ) = (jshoot[:] .= JShoot(ξ); nothing)      # auxiliary function
 
 p0_sol = fsolve(Shoot!, JShoot!, ξ, show_trace = true)      # solve
 println(p0_sol)
@@ -280,10 +280,9 @@ println(p0_sol)
 
 ```@example main
 # get optimal trajectory
-sol_ = φ((t0, tf), x0, p0_sol.x[1], saveat=range(t0, tf, 500))  
+sol = φ((t0, tf), x0, p0_sol.x[1], saveat=range(t0, tf, 500))  
 
 # plot
-sol = OptimalControl.OptimalControlSolution(sol_)
 t = time_grid(sol)
 x = state(sol)
 p = costate(sol)
