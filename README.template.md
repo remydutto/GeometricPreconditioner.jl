@@ -11,6 +11,4 @@ The GeometricPreconditioner.jl package is part of the [control-toolbox ecosystem
 
 <!-- INCLUDE_ABOUT -->
 
-<!-- INCLUDE_INSTALL -->
-
 <!-- INCLUDE_CONTRIBUTING -->
