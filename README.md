@@ -9,7 +9,7 @@ The GeometricPreconditioner.jl repo is part of the [control-toolbox ecosystem](h
 
 | **Category** | **Badge** |
 |-----------------------|-----------|
-| **Documentation** | [![Stable Docs](https://img.shields.io/badge/docs-stable-blue.svg)](control-toolbox.org/GeometricPreconditioner.jl/stable/) [![Dev Docs](https://img.shields.io/badge/docs-dev-8A2BE2.svg)](control-toolbox.org/GeometricPreconditioner.jl/dev/) |
+| **Documentation** | [![Stable Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://control-toolbox.org/GeometricPreconditioner.jl/stable/) [![Dev Docs](https://img.shields.io/badge/docs-dev-8A2BE2.svg)](https://control-toolbox.org/GeometricPreconditioner.jl/dev/) |
 | **CI / Build** | [![Build Status](https://github.com/control-toolbox/GeometricPreconditioner.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/control-toolbox/GeometricPreconditioner.jl/actions/workflows/CI.yml?query=branch%3Amain) |
 | **Release / Version** | [![Release](https://img.shields.io/github/v/release/control-toolbox/GeometricPreconditioner.jl.svg)](https://github.com/control-toolbox/GeometricPreconditioner.jl/releases) |
 | **License** | [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/control-toolbox/GeometricPreconditioner.jl/blob/master/LICENSE) |
