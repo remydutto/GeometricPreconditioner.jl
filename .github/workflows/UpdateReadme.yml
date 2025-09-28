@@ -34,6 +34,6 @@ jobs:
       output_file: README.md
       package_name: GeometricPreconditioner                  # package for INSTALL.md
       repo_name: control-toolbox/GeometricPreconditioner.jl  # repository for CONTRIBUTING.md links
-      doc_url: control-toolbox.org/GeometricPreconditioner.jl
+      doc_url: https://control-toolbox.org/GeometricPreconditioner.jl
       assignee: "ocots"
     secrets: inherit
