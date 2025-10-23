@@ -163,7 +163,7 @@ println("ξ = ", ξ[1])
 println("JS(ξ) : ", JS(ξ)[1])
 ```
 
-However, the solver $\texttt{hybrd1}$ uses rank 1 approximations to actualize the Jacobian insted of compute it at each iteration, which imply that it still converges to the solution even if the given Jacobian is completely false.
+However, the solver $\texttt{hybrd1}$ uses rank 1 approximations to actualize the Jacobian instead of compute it at each iteration, which imply that it still converges to the solution even if the given Jacobian is completely false.
 
 ```@example main
 JS!(js, ξ) = (js[:] .= JS(ξ); nothing)                      # auxiliary function
@@ -236,7 +236,7 @@ To provide this change of dynamic to the solver, we need to use a callback durin
 
 For us, the condition is given by $(x,p) \to p$. For the $\texttt{affect!}$ function, we use a global parameter $\alpha$. This parameter will be set to $\pm 1$ at the beginning of the integration and it sign will change with the $\texttt{affect!}$ function. 
 
-Thanks to the $\texttt{control-toolbox}$ package, the created callback can be easily pass to the integrator throught the $\texttt{Flow}$ function.
+Thanks to the $\texttt{control-toolbox}$ package, the created callback can be easily pass to the integrator through the $\texttt{Flow}$ function.
 
 ```@example main
 global α                                                    # parameter: ̇p(t) = α with α = ±1
