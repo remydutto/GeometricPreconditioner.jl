@@ -81,7 +81,7 @@ end
 
 cb = ContinuousCallback(condition, affect!)                     # callback 
 H(x, p) = p[1] * x[2] + α * p[2]
-ϕ_ = Flow(Hamiltonian(H), callback = cb)                        # flow with maximizing control 
+ϕ_ = Flow(OptimalControl.Hamiltonian(H), callback = cb)                        # flow with maximizing control 
 
 function ϕ(t0, x0, p0, tf; kwargs...)  
     if p0[2] == 0
