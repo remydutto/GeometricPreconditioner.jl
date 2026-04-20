@@ -142,7 +142,7 @@ println("ξ = ", ξ[1])
 println("JS(ξ) : ", JS(ξ)[1])
 ```
 
-However, the solver `\texttt{hybrd1}` uses rank 1 approximations to actualize the Jacobian instead of compute it at each iteration, which imply that it still converges to the solution even if the given Jacobian is completely false.
+However, the solver `hybrd1` uses rank 1 approximations to actualize the Jacobian instead of compute it at each iteration, which imply that it still converges to the solution even if the given Jacobian is completely false.
 
 ```@example main
 JS!(js, ξ) = (js[:] .= JS(ξ); nothing)              # Intermediate function
@@ -156,7 +156,7 @@ plt = plot(sol, size = (800, 600))                  # Plot
 
 ## Automatic differentiation (good way)
 
-The goal is to provide the true Jacobian of ``S`` by using the `\texttt{ForwardDiff}` package, and so we need to indicate to the solver that the dynamic of the system change when ``p = 0``.
+The goal is to provide the true Jacobian of ``S`` by using the `ForwardDiff` package, and so we need to indicate to the solver that the dynamic of the system change when ``p = 0``.
 
 To understand why we need to give this information to the solver, see the following details. 
 
@@ -209,9 +209,9 @@ To provide this change of dynamic to the solver, we need to use a callback durin
 
 For us, the condition is given by ``(x,p) \to p``. For the `affect!` function, we use a global parameter ``\alpha``. This parameter will be set to ``\pm 1`` at the beginning of the integration and it sign will change with the `affect!` function. 
 
-Thanks to the `control.jl` package, the created callback can be easily pass to the integrator through the `Flow` function. This in done in the following collapsed block.
+Thanks to the `OptimalControl.jl` package, the created callback can be easily pass to the integrator through the `Flow` function. This in done in the following collapsed block.
 
-!!! detail
+!!! details
     ```@example main
     # Parameter: ̇p(t) = α with α = ±1
     global α
