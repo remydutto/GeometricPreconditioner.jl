@@ -43,14 +43,14 @@ Let us consider the augmented formulation of the same problem as before
     \text{s.c.}~\dot x^0(t) = x(t), & t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
     \phantom{\mathrm{s.c.}~} \dot x(t) = u(t), & t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
     \phantom{\mathrm{s.c.}~} u(t) \in [-1,1], & t\in [t_0, t_f], \\[0.5em]
-    \phantom{\mathrm{s.c.}~} x^0(t_0) = 0, \quad x(t_0) = x_0, \quad x_1(t_f) = x_f,
+    \phantom{\mathrm{s.c.}~} x^0(t_0) = 0, \quad x(t_0) = x_0, \quad x(t_f) = x_f,
     \end{array} \right.
 ```
 
-with fixed initial state ``x_0``, initial time ``t_0``, final state ``x_f`` and final time ``t_f``, and where the augmented state is given by ``\hat x = (x^0, x_1)``, where ``x^0`` is the cost and ``x_1`` is the state. The augmented Hamiltonian is thus given by 
+with fixed initial state ``x_0``, initial time ``t_0``, final state ``x_f`` and final time ``t_f``, and where the augmented state is given by ``\hat x = (x^0, x)``, where ``x^0`` is the cost and ``x`` is the state. The augmented Hamiltonian is thus given by 
 
 ```math
-    H(\hat x, \hat p) = p^0 x_1 + \lvert p \rvert,
+    H(\hat x, \hat p) = p^0 x + \lvert p \rvert,
 ```
 
 where ``\hat p = (p^0, p)`` is the augmented costate, composed of the costate ``p`` associated with the state ``x`` and multiplier ``p^0`` associated with the cost ``x^0``. The flow ``\varphi`` associated to the true Hamiltonian ``H`` is computed thanks to the `Flow` and the `Hamiltonian` functions, computed properly as proposed in the last section. 
@@ -105,7 +105,7 @@ The general shooting function ``S \colon \mathbb R^2 \to \mathbb R`` associated 
     S(\hat p_0) = \pi_x \big( \varphi(t_0, \hat x_0, \hat p_0, t_f) \big),
 ```
 
-where ``\pi_x(x^0, x, p^0, p) = x_1`` is still the state projection. 
+where ``\pi_x(x^0, x, p^0, p) = x`` is still the state projection. 
 
 We are interested in two normalizations of this shooting function, thanks to the homogeneity of the BC-extremals on the augmented costate, which are 
 
@@ -286,7 +286,7 @@ plot_ellipse(a, b, θ, c, φ, x)
 The general shooting function ``T \colon \mathbb R^2 \to \mathbb R`` in the new coordinates is defined by 
 
 ```math
-    T(\hat q) = A_{x_1} \varphi \big(t_0, \hat x_0, \hat p_0(A^\top \hatq), t_f) + B_{x_1} - y_T,
+    T(\hat q) = A_{x} \varphi \big(t_0, \hat x_0, \hat p_0 (A^\top \hat q), t_f \big) + B_{x} - y_T,
 ```
 
 where the function ``\hat p_0 \colon \mathbb R^2 \to \mathbb R^2`` corresponds to the mapping between the final and the initial augmented costate, and is given by
@@ -295,12 +295,12 @@ where the function ``\hat p_0 \colon \mathbb R^2 \to \mathbb R^2`` corresponds t
     \hat p_0(p^0, p) = (p^0, p + p^0 t_f),
 ```
 
-and ``y_T = A_{x_1} x_T + B_x`` is the target in the new system of coordinates. By using the definition of ``S`` and ``y_T``, we obtain 
+and ``y_T = A_{x} x_T + B_x`` is the target in the new system of coordinates. By using the definition of ``S`` and ``y_T``, we obtain 
 
 ```math
 \begin{align*}
-    T(q) &= A_{x_1} \varphi \big(t_0, x_0, p_0(A^\top q), t_f) + B_{x_1} - (A_{x_1} x_T + B_{x_1}) \\
-    &= A_{x_1} (S \circ p_0)(A^\top q).
+    T(q) &= A_{x} \varphi \big(t_0, x_0, p_0(A^\top q), t_f) + B_{x} - (A_{x} x_T + B_{x}) \\
+    &= A_{x} (S \circ p_0)(A^\top q).
 \end{align*}
 ```
 
@@ -368,11 +368,18 @@ plot_sol(sol)
 
 # Comparison 
 
-It is shown in [mettre article] that if the boundary of the augmented accessible set is the fitted ellipse then the shooting function ``T_2`` corresponds to the identity function. Due to the error of the approximation, the function ``T_2`` is not the identity, but we hope that this function is close to this ideal function, and therefore the convergence of ``T_2`` is faster than the one of ``S_2``. 
+It is shown in [mettre article] that if the boundary of the augmented accessible set is the fitted ellipse then the shooting function ``T_2`` is defined by
+
+```math
+    T_2(q) = q-y_T.
+```
+Since the boundary of the augmented accessible set is not exactly the fitted ellipse, the function ``T_2`` is not the one above, but we hope that this function is close to this ideal function, and therefore the convergence of ``T_2`` is faster than the one of ``S_2``. Moreover, since ``y_T`` is a zero of ``T_2`` in this idea case, it is a natural initial guess for the shooting method. 
+
+The code below compare the convergence of function ``T_2`` and ``S_2``, and the function ``T_2`` with the natural initial guess.
 
 !!! details "Code to compare convergence"
     The code below compares the convergence of these two shooting functions, and provides the following plot.
-    ```julia
+    ```@example main
     # ============================================================================
     # CONVERGENCE ANALYSIS: Compare S₂ and T₂ shooting methods
     # ============================================================================
@@ -448,12 +455,6 @@ It is shown in [mettre article] that if the boundary of the augmented accessible
         end
     end
 
-    # Print convergence statistics
-    println("Convergence rates:")
-    println("S₂: ", 100*(1-length(findall(x -> x == -1, conv_S2))/N), " %")
-    println("T₂: ", 100*(1-length(findall(x -> x == -1, conv_T2))/N), " %")
-    println("T₂ with natural initial guess: ", 100*(1-length(findall(x -> x == -1, conv_T2_IG))/N), " %")
-
     # Compute mean error norms across all test cases
     mean_fnorms_S2 = mean(fnorms_S2, dims = 1)
     mean_fnorms_T2 = mean(fnorms_T2, dims = 1)
@@ -500,136 +501,20 @@ It is shown in [mettre article] that if the boundary of the augmented accessible
 
     # Combine plots
     plt2 = plot(plt21, plt22, plt23, layout = grid(1,3, widths = [0.30, 0.35, 0.35]))
-    plot(plt1, plt2, layout = grid(2,1, heights = [0.5, 0.5]), size=(800, 800)) 
+    plt = plot(plt1, plt2, layout = grid(2,1, heights = [0.5, 0.5]), size=(800, 800)) 
+
+    nothing; # hide
     ```
 
-```@setup main 
-# ============================================================================
-# CONVERGENCE ANALYSIS: Compare S₂ and T₂ shooting methods
-# ============================================================================
+```@example main
+    # Print convergence statistics
+    println("Convergence rates:")
+    println("S₂: ", 100*(1-length(findall(x -> x == -1, conv_S2))/N), " %")
+    println("T₂: ", 100*(1-length(findall(x -> x == -1, conv_T2))/N), " %")
+    println("T₂ with natural initial guess: ", 100*(1-length(findall(x -> x == -1, conv_T2_IG))/N), " %")
+```
 
-# Discretize the accessible final state range
-global xT = 0;
-q0_span = range(-1, 1, length=10000)                    # Range of q₀ values
-T2_span = [T₂(q) for q ∈ q0_span]                       # Compute T₂ over the range
-ε = 0.2                                                 # Tolerance for boundary selection
-i1 = findfirst(x -> x > T2_span[1]+ε , T2_span)         # Find start index
-i2 = findlast(x -> x < T2_span[end]-ε, T2_span)         # Find end index
 
-N = 1000                                                # Number of test points
-sol_T2 = range(q0_span[i1], q0_span[i2], length=N)      # q₀ values for testing
-# Convert to corresponding p₀ values in original coordinates
-sol_S2 = [((p₀(transpose(A)*[η(q), q]))/(norm(p₀(transpose(A)*[η(q), q]), 2)))[2]  for q ∈ sol_T2]
-
-xT_span = [S₂(p) for p ∈ sol_S2]                        # Target states for S₂
-yT_span = [T₂(q) for q ∈ sol_T2]                        # Target states for T₂
-
-# Initialize storage arrays for convergence analysis
-fnorms_S2 = zeros(N, 100)                               # Norm of S₂ at each iteration
-fnorms_T2 = zeros(N, 100)                               # Norm of T₂ at each iteration (in x-space)
-fnorms_T2_IG = zeros(N,100)                             # Norm of T₂ at each iteration (in x-space), with natural initial guess
-iterates_S2 = zeros(N, 100)                             # Iterates of S₂
-iterates_T2 = zeros(N, 100)                             # Iterates of T₂
-iterates_T2_IG = zeros(N, 100)                          # Iterates of T₂ with natural initial guess
-# Convergence status: -1=not converged, 1=converged, 0=converged but hit bounds
-conv_S2 = zeros(N,1)                                    # Convergence status of S₂
-conv_T2 = zeros(N,1)                                    # Convergence status of T₂
-conv_T2_IG = zeros(N,1)                                 # Convergence status of T₂ with natural initial guess
-
-# Intermediate function: compute S value from T iterates (for error comparison)
-T₂_(q0) = abs(q0) < 1 ? S(p₀(transpose(A)*[η.(q0),q0])) : sign(q0) * tf - xT
-
-# Main loop: test convergence for N different target states
-for i = 1:N
-    # Set current target state
-    global xT = xT_span[i]
-
-    ### Test S₂ (original shooting function) ###
-    global iterate_S2 = Vector{Float64}()                                               # Clear old iterates
-    q_sol_S2 = fsolve(S₂!, JS₂!, [-0.75], show_trace = false, tracing = true)           # Solve with fixed initial guess
-    if q_sol_S2.converged
-        fnorm_S2 = [q_sol_S2.trace.trace[j].fnorm for j ∈ 1:length(q_sol_S2.trace.trace)]
-        iterates_S2[i,1:length(iterate_S2)] = iterate_S2
-        conv_S2[i] = length(findall(x-> abs(x) > 1, iterate_S2)) == 0           
-        fnorms_S2[i,1:length(fnorm_S2)] = fnorm_S2
-    else
-        conv_S2[i] = -1                                                                 # Not converged
-    end
-
-    ### Test T₂ (transformed shooting function) ###
-    global iterate_T2 = Vector{Float64}()                                               # Clear old iterates
-    q_sol_T2 = fsolve(T₂!, JT₂!, [0.0], show_trace = false, tracing = true)             # Solve with fixed initial guess
-    if q_sol_T2.converged
-        iterates_T2[i,1:length(iterate_T2)] = iterate_T2
-        conv_T2[i] = length(findall(x-> abs(x) > 1, iterate_T2)) == 0
-        fnorms_T2[i, 1:length(iterate_T2)] = abs.(T₂_.(iterate_T2))
-    else
-        conv_T2[i] = -1                                                                 # Not converged
-    end
-
-    ### Test T₂ with natural initial guess ###
-    global iterate_T2 = Vector{Float64}()                                               # Clear old iterates
-    q_sol_T2_IG = fsolve(T₂!, JT₂!, [yT_span[i]], show_trace = false, tracing = true)   # Solve with target as initial guess
-    if q_sol_T2_IG.converged
-        iterates_T2_IG[i,1:length(iterate_T2)] = iterate_T2
-        conv_T2_IG[i] = length(findall(x-> abs(x) > 1, iterate_T2)) == 0
-        fnorms_T2_IG[i, 1:length(iterate_T2)] = abs.(T₂_.(iterate_T2))
-    else
-        conv_T2_IG[i] = -1                               # Not converged
-    end
-end
-
-# Print convergence statistics
-println("Convergence rates:")
-println("S₂: ", 100*(1-length(findall(x -> x == -1, conv_S2))/N), " %")
-println("T₂: ", 100*(1-length(findall(x -> x == -1, conv_T2))/N), " %")
-println("T₂ with natural initial guess: ", 100*(1-length(findall(x -> x == -1, conv_T2_IG))/N), " %")
-
-# Compute mean error norms across all test cases
-mean_fnorms_S2 = mean(fnorms_S2, dims = 1)
-mean_fnorms_T2 = mean(fnorms_T2, dims = 1)
-mean_fnorms_T2_IG = mean(fnorms_T2_IG, dims = 1)
-
-# Remove trailing zeros (beyond convergence) with tolerance
-ε = 1e-9;
-mean_fnorms_S2 = mean_fnorms_S2[1:findall(x -> x < ε, mean_fnorms_S2)[1][2]]
-mean_fnorms_T2 = mean_fnorms_T2[1:findall(x -> x < ε, mean_fnorms_T2)[1][2]]
-mean_fnorms_T2_IG = mean_fnorms_T2_IG[1:findall(x -> x < ε, mean_fnorms_T2_IG)[1][2]]
-
-# Plot 1: Convergence rate comparison (log scale)
-plt1 = plot(0:length(mean_fnorms_S2)-1, mean_fnorms_S2, label = "S₂", lw = 3)
-plot!(plt1, 0:length(mean_fnorms_T2)-1, mean_fnorms_T2, label = "T₂", lw = 3)
-plot!(plt1, 0:length(mean_fnorms_T2_IG)-1, mean_fnorms_T2_IG, label = "T₂ with IG", lw = 3)
-plot!(plt1, yaxis = :log10, xlim = [0, 30], ylim = [ε, 10], xlabel = "Iterations", ylabel = "Error")
-
-global xT = 0;
-
-# Plot 2: Convergence regions visualization
-plt21 = plot(xlim = [-1,1], xlabel = "p₀", title = "S₂")
-plot!(plt21, S₂, c = :black, label = nothing)
-# Color code: green=converged, blue=converged but hit bounds, red=not converged
-color = [conv_S2[i]==1 ? :green : conv_S2[i] == 0 ? :blue : :red for i ∈ 1:N]
-scatter!(sol_S2, xT_span, color = color, markerstrokecolor = color, marker = 2, label =nothing)
-plot!(plt21, [-0.75, -0.75], [-5, 5], c = :black, ls = :dash, label = nothing)  # Initial guess line
-
-plt22 = plot(xlim = [-1,1], xlabel = "q₀", title = "T₂")
-plot!(plt22, T₂, c = :black, label = nothing)
-color = [conv_T2[i]==1 ? :green : conv_T2[i] == 0 ? :blue : :red for i ∈ 1:N]
-scatter!(plt22, sol_T2, yT_span, color = color, markerstrokecolor = color, marker = 2, label = "")
-plot!(plt22, [0, 0], [T2_span[1], T2_span[end]], c = :black, ls = :dash, label = nothing)  # Initial guess line
-
-plt23 = plot(xlim = [-1,1], xlabel = "q₀", title = "T₂ with IG")
-plot!(plt23, T₂, c = :black, label = nothing)
-color = [conv_T2_IG[i]==1 ? :green : conv_T2_IG[i] == 0 ? :blue : :red for i ∈ 1:N]
-scatter!(plt23, sol_T2, yT_span, color = color, markerstrokecolor = color, marker = 2, label = "")
-plot!(plt23, [-1, 1], [-1, 1], c = :black, ls = :dash, label = nothing)  # Natural initial guess line
-
-# Add legend
-scatter!(plt21, 1,1, color = :green, markerstrokecolor = :green, marker = 2, label = "converged")
-scatter!(plt21, 1,1, color = :blue, markerstrokecolor = :blue, marker = 2, label = "converged but HB")
-scatter!(plt21, 1,1, color = :red, markerstrokecolor = :red, marker = 2, label = "not converged")
-
-# Combine plots
-plt2 = plot(plt21, plt22, plt23, layout = grid(1,3, widths = [0.30, 0.35, 0.35]))
-plot(plt1, plt2, layout = grid(2,1, heights = [0.5, 0.5]), size=(800, 800))
+```@example main 
+plt
 ```
