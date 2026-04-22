@@ -17,9 +17,9 @@ Build Info:
   Official https://julialang.org release
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
-  CPU: 4 × AMD EPYC 7763 64-Core Processor
+  CPU: 4 × AMD EPYC 9V74 80-Core Processor
   WORD_SIZE: 64
-  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)
+  LLVM: libLLVM-18.1.7 (ORCJIT, znver4)
   GC: Built with stock GC
 Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)
 Environment:
@@ -29,7 +29,7 @@ Environment:
   [f6369f11] ForwardDiff v1.3.3
   [4fb4c77a] GeometricPreconditioner v0.4.0 `~/work/GeometricPreconditioner.jl/GeometricPreconditioner.jl`
   [4854310b] MINPACK v1.3.0
-  [5f98b655] OptimalControl v2.0.2
+  [5f98b655] OptimalControl v2.0.3
   [91a5bcdd] Plots v1.41.6</code></pre></details><details style="margin-bottom: 0.5em;"><summary>📚 Complete manifest</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/GeometricPreconditioner.jl/GeometricPreconditioner.jl/docs/Manifest.toml`
   [54578032] ADNLPModels v0.8.13
   [47edcb42] ADTypes v1.21.0
@@ -57,11 +57,11 @@ Environment:
   [fa961155] CEnum v0.5.0
   [2a0fbf3d] CPUSummary v0.2.7
   [54762871] CTBase v0.18.7
-⌃ [790bbbee] CTDirect v1.0.9
-⌃ [1c39547c] CTFlows v0.8.23
-⌅ [34c4fa32] CTModels v0.9.14
+  [790bbbee] CTDirect v1.0.10
+  [1c39547c] CTFlows v0.8.25
+  [34c4fa32] CTModels v0.10.0
   [32681960] CTParser v0.8.15
-⌃ [d3e8d392] CTSolvers v0.4.15
+  [d3e8d392] CTSolvers v0.4.16
   [d360d2e6] ChainRulesCore v1.26.1
   [fb6a15b2] CloseOpenIntervals v0.1.13
   [944b1d66] CodecZlib v0.7.8
@@ -84,9 +84,9 @@ Environment:
   [864edb3b] DataStructures v0.19.4
   [bcd4f6db] DelayDiffEq v5.74.1
   [8bb1440f] DelimitedFiles v1.9.1
-  [2b5f629d] DiffEqBase v6.218.0
-  [459566f4] DiffEqCallbacks v4.15.0
-  [77a26b50] DiffEqNoiseProcess v5.29.0
+⌅ [2b5f629d] DiffEqBase v6.218.0
+  [459566f4] DiffEqCallbacks v4.16.0
+  [77a26b50] DiffEqNoiseProcess v5.30.0
   [163ba53b] DiffResults v1.1.0
   [b552c78f] DiffRules v1.15.1
   [0c46a032] DifferentialEquations v7.17.0
@@ -113,7 +113,7 @@ Environment:
   [1fa38f19] Format v1.3.7
   [f6369f11] ForwardDiff v1.3.3
   [069b7b12] FunctionWrappers v1.1.3
-  [77dc65aa] FunctionWrappersWrappers v1.6.0
+  [77dc65aa] FunctionWrappersWrappers v1.7.0
   [46192b85] GPUArraysCore v0.2.0
   [28b8d3ca] GR v0.73.24
   [c145ed77] GenericSchur v0.5.6
@@ -136,7 +136,7 @@ Environment:
   [692b3bcd] JLLWrappers v1.7.1
   [682c06a0] JSON v1.5.0
   [ae98c720] Jieko v0.2.1
-  [ccbc3e58] JumpProcesses v9.25.1
+  [ccbc3e58] JumpProcesses v9.26.0
   [63c18a36] KernelAbstractions v0.9.41
   [ba0b0d4f] Krylov v0.10.6
   [b964fa9f] LaTeXStrings v1.4.0
@@ -173,13 +173,13 @@ Environment:
   [9a2c21bd] NonlinearSolveQuasiNewton v1.13.1
   [26075421] NonlinearSolveSpectralMethods v1.7.1
   [4d8831e6] OpenSSL v1.6.1
-  [5f98b655] OptimalControl v2.0.2
+  [5f98b655] OptimalControl v2.0.3
   [bca83a33] OptimizationBase v5.1.0
   [bac558e1] OrderedCollections v1.8.1
   [1dea7af3] OrdinaryDiffEq v6.111.0
   [89bda076] OrdinaryDiffEqAdamsBashforthMoulton v1.11.0
   [6ad6398a] OrdinaryDiffEqBDF v1.26.0
-  [bbf590c4] OrdinaryDiffEqCore v3.33.0
+⌅ [bbf590c4] OrdinaryDiffEqCore v3.33.0
   [50262376] OrdinaryDiffEqDefault v1.14.0
   [4302a76b] OrdinaryDiffEqDifferentiation v2.9.0
   [9286f039] OrdinaryDiffEqExplicitRK v1.12.0
@@ -238,7 +238,7 @@ Environment:
 ⌅ [0bca4576] SciMLBase v2.155.0
   [19f34311] SciMLJacobianOperators v0.1.13
   [a6db7da4] SciMLLogging v1.9.1
-  [c0aeaf25] SciMLOperators v1.16.0
+  [c0aeaf25] SciMLOperators v1.17.0
   [431bcebd] SciMLPublic v1.0.1
   [53ae85a6] SciMLStructures v1.10.0
   [6c6a2e73] Scratch v1.3.0
@@ -277,7 +277,7 @@ Environment:
   [af2a2fcd] StochasticDiffEqWeak v1.1.0
   [7792a7ef] StrideArraysCore v0.5.8
   [ec057cc2] StructUtils v2.7.2
-  [c3572dad] Sundials v5.2.0
+  [c3572dad] Sundials v5.3.0
   [2efcf032] SymbolicIndexingInterface v0.3.46
   [62fd8b95] TensorCore v0.1.1
   [8290d209] ThreadingUtilities v0.5.5
@@ -429,4 +429,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.7.0+0
-Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="2D-example.html">Indirect shooting »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 21 April 2026 15:18">Tuesday 21 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="2D-example.html">Indirect shooting »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 22 April 2026 13:28">Wednesday 22 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

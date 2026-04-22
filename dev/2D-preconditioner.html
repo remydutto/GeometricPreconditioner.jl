@@ -1,378 +1,340 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Geometric preconditioner · Geometric preconditioner</title><meta name="title" content="Geometric preconditioner · Geometric preconditioner"/><meta property="og:title" content="Geometric preconditioner · Geometric preconditioner"/><meta property="twitter:title" content="Geometric preconditioner · Geometric preconditioner"/><meta name="description" content="Documentation for Geometric preconditioner."/><meta property="og:description" content="Documentation for Geometric preconditioner."/><meta property="twitter:description" content="Documentation for Geometric preconditioner."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="https://control-toolbox.org/assets/css/documentation.css" rel="stylesheet" type="text/css"/><script src="https://control-toolbox.org/assets/js/documentation.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Geometric preconditioner</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction</a></li><li><a class="tocitem" href="2D-example.html">Indirect shooting</a></li><li class="is-active"><a class="tocitem" href="2D-preconditioner.html">Geometric preconditioner</a><ul class="internal"><li class="toplevel"><a class="tocitem" href="#Construction-of-the-geometric-preconditioner"><span>Construction of the geometric preconditioner</span></a></li><li class="toplevel"><a class="tocitem" href="#Preconditioned-shoot"><span>Preconditioned shoot</span></a></li><li class="toplevel"><a class="tocitem" href="#Comparison"><span>Comparison</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="2D-preconditioner.html">Geometric preconditioner</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="2D-preconditioner.html">Geometric preconditioner</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl/blob/main/docs/src/2D-preconditioner.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Augmented-formulation"><a class="docs-heading-anchor" href="#Augmented-formulation">Augmented formulation</a><a id="Augmented-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Augmented-formulation" title="Permalink"></a></h1><p>We consider the augmented formulation of the same problem as before</p><p class="math-container">\[    \left\{ \begin{array}{ll}
-    \displaystyle \min_{x,u} x^0(t_f) \\[1em]
-    \text{s.c.}~\dot x^0(t) = x_1(t), &amp; t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
-    \phantom{\mathrm{s.c.}~} \dot x_1(t) = u(t), &amp; t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
-    \phantom{\mathrm{s.c.}~} u(t) \in [-1,1], &amp; t\in [t_0, t_f], \\[0.5em]
-    \phantom{\mathrm{s.c.}~} x(t_0) = x_0, \quad x_1(t_f) = x_f,
-    \end{array} \right.\]</p><p>with fixed <span>$x_0$</span>, <span>$t_0$</span>, <span>$x_f$</span> and <span>$t_f$</span>, and where <span>$x = (x^0, x_1)$</span>. The augmented Hamiltonian of this problem is given by </p><p class="math-container">\[    H(x,p) = p^0 x_1 + \lvert p_1 \rvert,\]</p><p>where <span>$p = (p^0, p_1)$</span> is the augmented costate, composed by the costate <span>$p_1$</span> associated to the state <span>$x_1$</span> and multiplier <span>$p^0$</span> associated to the cost <span>$x^0$</span> which is no longer fixed to <span>$-1$</span>. The flow <span>$\varphi$</span> associated to the true Hamiltonian <span>$H$</span> is computed thanks to the <span>$\texttt{flow}$</span> and the <span>$\texttt{Hamiltonian}$</span> functions.</p><p>The general shooting function <span>$S \colon \mathbb R^2 \to \mathbb R$</span> associated to this Hamiltonian is defined by </p><p class="math-container">\[    S(p_0) = \pi_x \big( \varphi(t_0, x_0, p_0, t_f) \big),\]</p><p>where <span>$\pi_x(x^0, x_1, p^0, x_1) = x_1$</span> is still the state projection. </p><p>We are interested in two normalization of this shooting function, thanks to the homogeneity of the BC-extremals on the augmented costate, which are </p><p class="math-container">\[    S_1(p_0) = S(-1, p_0) \qquad \text{and} \qquad S_2(p_0) = S \big( \eta(p), p_0 \big)\]</p><p>where the function <span>$\eta \colon [-1, 1] \to \mathbb R$</span> is defined by </p><p class="math-container">\[    \eta(p) = -\sqrt{ 1 - p^2}.\]</p><p>The following code creates and plots these shooting functions. </p><pre><code class="language-julia hljs">using OptimalControl
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Geometric preconditioner · Geometric preconditioner</title><meta name="title" content="Geometric preconditioner · Geometric preconditioner"/><meta property="og:title" content="Geometric preconditioner · Geometric preconditioner"/><meta property="twitter:title" content="Geometric preconditioner · Geometric preconditioner"/><meta name="description" content="Documentation for Geometric preconditioner."/><meta property="og:description" content="Documentation for Geometric preconditioner."/><meta property="twitter:description" content="Documentation for Geometric preconditioner."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="https://control-toolbox.org/assets/css/documentation.css" rel="stylesheet" type="text/css"/><script src="https://control-toolbox.org/assets/js/documentation.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Geometric preconditioner</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction</a></li><li><a class="tocitem" href="2D-example.html">Indirect shooting</a></li><li class="is-active"><a class="tocitem" href="2D-preconditioner.html">Geometric preconditioner</a><ul class="internal"><li><a class="tocitem" href="#Augmented-formulation"><span>Augmented formulation</span></a></li><li><a class="tocitem" href="#Classical-shooting-method"><span>Classical shooting method</span></a></li><li><a class="tocitem" href="#Construction-of-the-geometric-preconditioner"><span>Construction of the geometric preconditioner</span></a></li><li><a class="tocitem" href="#Preconditioned-shooting-method"><span>Preconditioned shooting method</span></a></li><li class="toplevel"><a class="tocitem" href="#Comparison"><span>Comparison</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="2D-preconditioner.html">Geometric preconditioner</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="2D-preconditioner.html">Geometric preconditioner</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl/blob/main/docs/src/2D-preconditioner.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><p>The goal is now to improve the convergence of the indirect shooting method, by using a geometric preconditioner of the shooting function.</p><p>Let us start by importing the packages</p><pre><code class="language-julia hljs">using GeometricPreconditioner
+using OptimalControl
 using Plots
 using ForwardDiff
 using DifferentialEquations
 using MINPACK
 using Statistics
-
+using LinearAlgebra</code></pre><div class="admonition is-info" id="Note-50b9c8582a81154e"><header class="admonition-header">Note<a class="admonition-anchor" href="#Note-50b9c8582a81154e" title="Permalink"></a></header><div class="admonition-body"><p>Please note that we use the <code>GeometricPreconditioner.jl</code> package only for some functions used for the construction of plots or for fitting ellipses to data, which are provided by the <code>utils.jl</code> file.</p></div></div><h2 id="Augmented-formulation"><a class="docs-heading-anchor" href="#Augmented-formulation">Augmented formulation</a><a id="Augmented-formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Augmented-formulation" title="Permalink"></a></h2><p>Let us consider the augmented formulation of the same problem as before</p><p class="math-container">\[    \left\{ \begin{array}{ll}
+    \displaystyle \min_{\hat x,u} x^0(t_f) \\[1em]
+    \text{s.c.}~\dot x^0(t) = x(t), &amp; t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
+    \phantom{\mathrm{s.c.}~} \dot x(t) = u(t), &amp; t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
+    \phantom{\mathrm{s.c.}~} u(t) \in [-1,1], &amp; t\in [t_0, t_f], \\[0.5em]
+    \phantom{\mathrm{s.c.}~} x^0(t_0) = 0, \quad x(t_0) = x_0, \quad x_1(t_f) = x_f,
+    \end{array} \right.\]</p><p>with fixed initial state <span>$x_0$</span>, initial time <span>$t_0$</span>, final state <span>$x_f$</span> and final time <span>$t_f$</span>, and where the augmented state is given by <span>$\hat x = (x^0, x_1)$</span>, where <span>$x^0$</span> is the cost and <span>$x_1$</span> is the state. The augmented Hamiltonian is thus given by </p><p class="math-container">\[    H(\hat x, \hat p) = p^0 x_1 + \lvert p \rvert,\]</p><p>where <span>$\hat p = (p^0, p)$</span> is the augmented costate, composed of the costate <span>$p$</span> associated with the state <span>$x$</span> and multiplier <span>$p^0$</span> associated with the cost <span>$x^0$</span>. The flow <span>$\varphi$</span> associated to the true Hamiltonian <span>$H$</span> is computed thanks to the <code>Flow</code> and the <code>Hamiltonian</code> functions, computed properly as proposed in the last section. </p><details class="admonition is-details" id="Details-9ea8bda3278025e7"><summary class="admonition-header">Details<a class="admonition-anchor" href="#Details-9ea8bda3278025e7" title="Permalink"></a></summary><div class="admonition-body"><pre><code class="language-julia hljs"># Global control variable for bang-bang control (±1)
 global α = 1
 
-function condition(z, t, integrator)                            # event when condition(z,t,integrator) == 0
+# Condition function: triggers callback when p = 0 (control switching)
+function condition(z, t, integrator)
     x⁰,x,p⁰,p = z
     return p
 end
 
-function affect!(integrator)                                    # action when condition == 0
+# Affect function: flips control sign when condition is met (bang-bang switching)
+function affect!(integrator)
     global α = -α
     nothing
 end
 
-cb = ContinuousCallback(condition, affect!)                     # callback
-H(x, p) = p[1] * x[2] + α * p[2]
-ϕ_ = Flow(OptimalControl.Hamiltonian(H), callback = cb)                        # flow with maximizing control
+cb = ContinuousCallback(condition, affect!)                     # Continuous callback for control switching
+H(x, p) = p[1] * x[2] + α * p[2]                                # Hamiltonian function
+ϕ_ = Flow(OptimalControl.Hamiltonian(H), callback = cb)         # Hamiltonian flow with maximizing control
 
+# Flow wrapper for shooting function: sets initial control direction based on costate
 function ϕ(t0, x0, p0, tf; kwargs...)
     if p0[2] == 0
-        global α = -sign(p0[1])
+        global α = -sign(p0[1])  # Set control based on p⁰ if p₀ = 0
     else
-        global α = sign(p0[2])
+        global α = sign(p0[2])    # Set control based on p
     end
     return ϕ_(t0, x0, p0, tf; kwargs...)
 end
 
-function ϕ((t0, tf), x0, p0; kwargs...)                         # flow for plot
+# Flow wrapper for plotting: handles time interval tuple
+function ϕ((t0, tf), x0, p0; kwargs...)
     if p0[2] == 0
         global α = -sign(p0[1])
     else
         global α = sign(p0[2])
     end
     return ϕ_((t0, tf), x0, p0; kwargs...)
-end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ϕ (generic function with 2 methods)</code></pre></div></details><h2 id="Classical-shooting-method"><a class="docs-heading-anchor" href="#Classical-shooting-method">Classical shooting method</a><a id="Classical-shooting-method-1"></a><a class="docs-heading-anchor-permalink" href="#Classical-shooting-method" title="Permalink"></a></h2><p>The general shooting function <span>$S \colon \mathbb R^2 \to \mathbb R$</span> associated to this Hamiltonian is defined by </p><p class="math-container">\[    S(\hat p_0) = \pi_x \big( \varphi(t_0, \hat x_0, \hat p_0, t_f) \big),\]</p><p>where <span>$\pi_x(x^0, x, p^0, p) = x_1$</span> is still the state projection. </p><p>We are interested in two normalizations of this shooting function, thanks to the homogeneity of the BC-extremals on the augmented costate, which are </p><p class="math-container">\[    S_1(p_0) = S(-1, p_0) \qquad \text{and} \qquad S_2(p_0) = S \big( \eta(p_0), p_0 \big)\]</p><p>where the function <span>$\eta \colon [-1, 1] \to \mathbb R$</span> is defined by </p><p class="math-container">\[    \eta(p) = -\sqrt{ 1 - p^2}.\]</p><p>The following code creates and plots these shooting functions. </p><pre><code class="language-julia hljs"># Problem parameters
+t0 = 0                                                                      # Initial time
+x0 = [0,0]                                                                  # Initial augmented state (x⁰, x)
+tf = 5                                                                      # Final time
+global xT = 0                                                               # Target final state
 
-t0 = 0                                                          # initial time
-x0 = [0,0]                                                      # initial augmented state
-tf = 5                                                          # final time
-xT = 0                                                          # final state
+# Helper functions
+π((x,p)) = x[2]                                                             # Projection on state space (extract x from augmented state)
+η(p0) = -sqrt.(1 - p0.^2)                                                   # Function η(⋅) = -√(1 - p0²)
 
-π((x,p)) = x[2]                                                 # projection on state space
-η(p0) = -sqrt.(1 - p0.^2)                                       # function η(⋅)
+# Shooting function S
+S(p0; xT=xT) = π( ϕ(t0, x0, p0, tf) ) - xT                                  # General shooting function
 
-S(p0) = π( ϕ(t0, x0, p0, tf) ) - xT                             # general hooting function
+# Normalized shooting functions for different boundary conditions
+S₁(p0; xT=xT) = S([-1, p0]; xT=xT)                                          # Normalization 1: fix p⁰ = -1
+S₂(p0; xT=xT) = abs(p0) &lt; 1 ? S([η(p0), p0]; xT=xT) : sign(p0)*tf - xT      # Normalization 2: use function η to have |p|=1
 
-S₁(p0) = S([-1, p0])                                            # normalization 1
-S₂(p0) = abs(p0) &lt; 1 ? S([η(p0), p0]) : sign(p0)*tf - xT        # normalization 2
-
-# Plot
-plt_S1 = plot(range(-7, 2, 500), S₁ , color = 2, label = &quot;&quot;)
-plot!(xlabel = &quot;p₀&quot;, ylabel = &quot;S₁&quot;, xlim = [-7,2])
-
-plt_S2 = plot(range(-1, 1, 500), S₂, color = 3)
-plot!(xlabel = &quot;p₀&quot;, ylabel = &quot;S₂&quot;, xlim = [-1,1], legend=false)
-
-S_(p⁰, p) = S([p⁰, p])
-plt_S = surface(range(0, -1.5, 100), range(-8, 2, 100), S_, camera = (30,30))
-surface!(xlabel = &quot;p⁰&quot;, ylabel = &quot;p₀&quot;, zlabel = &quot;φₓ&quot;, xflip = true)
-plot3d!(-1*ones(100), range(-8, 2, 100), S₁.(range(-8, 2, 100)), label = &quot;S₁&quot;)
-plot3d!(η.(range(-1, 1, 100)), range(-1, 1, 100), S₂.(range(-1, 1, 100)), label = &quot;S₂&quot;)
-
-plt_S12 = plot(plt_S1, plt_S2, layout = (1,2))
-plt_total = plot(plt_S, plt_S12, layout = grid(2,1, heights = [2/3, 1/3]), size=(700, 600))
-
+# Create animated 3D plot of shooting functions
+plt = plot_shooting(S, S₁, S₂, :S)                                          # Plot (see utils.jl)
 @gif for i ∈ [range(30, 90, 50); 90*ones(25); range(90, 30, 50); 30*ones(25)]
-    plot!(plt_total[1], camera=(i,i),
+    plot!(plt[1], camera=(i,i),                                             # Rotate camera angle
         zticks = i==90 ? false : true,
         zlabel = i==90 ? &quot;&quot; : &quot;S&quot; )
-end</code></pre><img src="2D-preconditioner-72ce4a0a.gif" alt="Example block output"/><p>As done before, we use the solver <span>$\texttt{hybrd1}$</span> from the <span>$\texttt{MINPACK.jl}$</span> package to find a zero of <span>$S_2$</span>.</p><pre><code class="language-julia hljs">global iterate_S2 = Vector{Float64}()                           # global vector to store iterates of the solver
+end</code></pre><img src="2D-preconditioner-aa058b5a.gif" alt="Example block output"/><p>As done in the last section, we can use the solver <code>hybrd1</code> from the <code>MINPACK.jl</code> package to find a zero of the shooting function <span>$S_2$</span>.</p><pre><code class="language-julia hljs"># Global vector to store solver iterates
+global iterate_S2 = Vector{Float64}()
 
-function S₂!(s₂, ξ)                                             # intermediate function
-    push!(iterate_S2, ξ[1])                                     # stock the iterate
-    return (s₂[:] .= S₂(ξ[1]); nothing)
+# Wrapper function for S₂ compatible with MINPACK solver (stores iterates)
+function S₂!(s₂, ξ; xT=xT)
+    push!(iterate_S2, ξ[1])                                 # Store current iterate
+    return (s₂[:] .= S₂(ξ[1]; xT=xT); nothing)              # Compute S₂ value in-place
 end
 
-JS₂(ξ) = ForwardDiff.jacobian(p0 -&gt; [S₂(p0[1])], ξ)             # compute jacobian by forward differentiation
-JS₂!(js₂, ξ) = (js₂[:] .= JS₂(ξ); nothing)                      # intermediate function
+# Jacobian of S₂ using automatic differentiation
+JS₂(ξ; xT=xT) = ForwardDiff.jacobian(p0 -&gt; [S₂(p0[1]; xT=xT)], ξ)
+# Wrapper for Jacobian compatible with MINPACK solver
+JS₂!(js₂, ξ; xT=xT) = (js₂[:] .= JS₂(ξ; xT=xT); nothing)
 
-ξ = [-0.5]                                                      # initial guess
-p0_sol = fsolve(S₂!, JS₂!, ξ, show_trace = true)                # solve
-println(p0_sol)                                                 # print solution</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Iter     f(x) inf-norm    Step 2-norm      Step time
-------   --------------   --------------   --------------
-     1     3.845299e+00     0.000000e+00         0.032187
-     2     5.000000e+00     1.559496e+00         5.099299
-     3     5.000000e+00     4.983094e-01         0.000072
-     4     5.000000e+00     4.983094e-01         0.000458
-     5     5.000000e+00     4.983094e-01         0.000019
-     6     2.825589e+00     9.417472e-02         0.000303
-     7     3.275582e+00     5.569993e-02         0.000227
-     8     1.835694e+00     1.605481e-02         0.000239
-     9     5.000000e+00     4.108358e-02         0.000024
-    10     8.767661e-01     2.198078e-02         0.000225
-    11     1.052824e+00     2.476848e-03         0.000197
-    12     2.252319e-01     7.373620e-04         0.000212
-    13     6.733090e-02     6.111142e-05         0.000236
-    14     4.061535e-03     3.236778e-06         0.000225
-    15     6.974843e-05     1.047584e-08         0.000211
-    16     7.333039e-08     3.198330e-12         0.000221
-    17     1.320624e-12     3.527846e-18         0.000209
-Results of Nonlinear Solver Algorithm
+ξ = [-0.5]                                                  # Initial guess for solver
+p0_sol = fsolve(S₂!, JS₂!, ξ, show_trace = true)            # Solve S₂(p0) = 0 using MINPACK</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Results of Nonlinear Solver Algorithm
  * Algorithm: Modified Powell (User Jac, Expert)
  * Starting Point: [-0.5]
  * Zero: [-0.9284766908852256]
  * Inf-norm of residuals: 0.000000
  * Convergence: true
  * Message: algorithm estimates that the relative error between x and the solution is at most tol
- * Total time: 5.134579 seconds
+ * Total time: 4.982634 seconds
  * Function Calls: 17
- * Jacobian Calls (df/dx): 2</code></pre><pre><code class="language-julia hljs">sol = ϕ((t0, tf), x0, [η(p0_sol.x[1]), p0_sol.x[1]],
-    saveat=range(t0, tf, 500))                                  # get optimal trajectory
-
-# plot
-t = sol.t
-x⁰ = [sol.u[i][1] for i in 1:length(sol.u)]
-x  = [sol.u[i][2] for i in 1:length(sol.u)]
-p⁰ = [sol.u[i][3] for i in 1:length(sol.u)]
-p  = [sol.u[i][4] for i in 1:length(sol.u)]
-u = sign.(p)
-
-plt_x⁰ = plot(t, x⁰, label = &quot;x⁰&quot;)
-plt_x  = plot(t, x , label = &quot;x&quot; )
-plt_p⁰ = plot(t, p⁰, label = &quot;p⁰&quot;, ylim=[-1,1])
-plt_p  = plot(t, p , label = &quot;p&quot; )
-plt_u  = plot(t, u,  label = &quot;u&quot; )
-
-plt_xp = plot(plt_x⁰, plt_p⁰, plt_x, plt_p, layout=(2, 2))
-plot(plt_xp, plt_u, layout = grid(2,1, heights = [2/3, 1/3]), size=(700, 600))</code></pre><img src="2D-preconditioner-e4f9e09d.svg" alt="Example block output"/><h1 id="Construction-of-the-geometric-preconditioner"><a class="docs-heading-anchor" href="#Construction-of-the-geometric-preconditioner">Construction of the geometric preconditioner</a><a id="Construction-of-the-geometric-preconditioner-1"></a><a class="docs-heading-anchor-permalink" href="#Construction-of-the-geometric-preconditioner" title="Permalink"></a></h1><p>The goal is now to use the geometric preconditioning method proposed in [mettre article]. For this purpose, the first step is to create some points in the boundary of the accessible augmented set, and to fit an ellipse on these points. </p><p>The second step is to create the linear diffeomorphism <span>$\phi \colon \mathbb R^2 \to \mathbb R^2, (x^0,x_1) \to Ax + B$</span> that transforms the fitted ellipse into the unit circle, and that satisfy the condition </p><p class="math-container">\[    \frac{\partial \phi}{\partial x^0} = k e_1, \]</p><p>with <span>$k&gt;0$</span> and <span>$e_1 = (1,0)$</span>. In this context, we denote </p><p class="math-container">\[    A = \left( \begin{array}{cc} k &amp; A_{x^0} \\ 0 &amp; A_{x_1} \end{array} \right)
+ * Jacobian Calls (df/dx): 2</code></pre><p>And we can compute the optimal trajectory and plot the solution.</p><pre><code class="language-julia hljs"># Compute optimal trajectory
+sol = ϕ((t0, tf), x0, [η(p0_sol.x[1]), p0_sol.x[1]], saveat=range(t0, tf, 500))
+# Plot the optimal solution (state, costate, and control) (see utils.jl)
+plot_sol(sol)</code></pre><img src="2D-preconditioner-0f048e63.svg" alt="Example block output"/><h2 id="Construction-of-the-geometric-preconditioner"><a class="docs-heading-anchor" href="#Construction-of-the-geometric-preconditioner">Construction of the geometric preconditioner</a><a id="Construction-of-the-geometric-preconditioner-1"></a><a class="docs-heading-anchor-permalink" href="#Construction-of-the-geometric-preconditioner" title="Permalink"></a></h2><p>The goal is now to use the geometric preconditioning method proposed in [mettre article]. For this purpose, the first step is to create points on the boundary of the accessible augmented set, and to fit an ellipse to these points. </p><p>The second step is to create the linear diffeomorphism <span>$\phi \colon \mathbb R^2 \to \mathbb R^2, \hat x \to A \hat x + B$</span> that transforms the fitted ellipse into the unit circle, and that satisfies the condition </p><p class="math-container">\[    \frac{\partial \phi}{\partial x^0} = k e_1, \]</p><p>with <span>$k&gt;0$</span> and <span>$e_1 = (1,0)$</span>. In this context, we denote </p><p class="math-container">\[    A = \left( \begin{array}{cc} k &amp; A_{x^0} \\ 0 &amp; A_{x} \end{array} \right)
     \qquad \text{and} \qquad 
-    B = \left( \begin{array}{c} B_{x^0} \\ B_{x_1} \end{array} \right).\]</p><p>This diffeomorphism is given from the semi-axis <span>$a,b &gt;0$</span>, the angle <span>$\theta \in [0, \frac{\pi}{2}[$</span> between the semi-axis <span>$b$</span> and the <span>$x$</span>-axis, and the center <span>$c \in \mathbb R^2$</span> by </p><p class="math-container">\[    \phi(x) = r(-\beta_0) s(a^{-1}, b^{-1}) r(\theta) (x - c),\]</p><p>where <span>$r$</span> and <span>$s$</span> correspond respectively to the rotation and the scale matrix, defined by </p><p class="math-container">\[    r(\theta) = \left( \begin{array}{cc} \phantom - \cos(\theta) &amp; \sin(\theta) \\ -\sin(\theta) &amp; \cos(\theta) \end{array} \right)
+    B = \left( \begin{array}{c} B_{x^0} \\ B_{x} \end{array} \right).\]</p><p>This diffeomorphism is given by the semi-axes <span>$a,b &gt;0$</span>, the angle <span>$\theta \in [0, \frac{\pi}{2}[$</span> between the semi-axis <span>$b$</span> and the x-axis, and the center <span>$c \in \mathbb R^2$</span> by </p><p class="math-container">\[    \phi(x) = r(-\beta_0) s(a^{-1}, b^{-1}) r(\theta) (x - c),\]</p><p>where <span>$r$</span> and <span>$s$</span> correspond respectively to the rotation and the scaling matrix, defined by </p><p class="math-container">\[    r(\theta) = \left( \begin{array}{cc} \phantom - \cos(\theta) &amp; \sin(\theta) \\ -\sin(\theta) &amp; \cos(\theta) \end{array} \right)
     \qquad \text{and} \qquad
-    s(a,b) = \left( \begin{array}{cc} a &amp; 0 \\ 0 &amp; b \end{array} \right),\]</p><p>and where <span>$\beta_0 = \arctan \left(\frac{a \sin(\theta)}{b \cos(\theta)} \right)$</span>. </p><article class="docstring">
-<header>
-    <a class="docstring-article-toggle-button fa-solid fa-chevron-right" href="javascript:;" title="Expand docstring"> </a>
-    <code>fit_ellipse</code> — <span class="docstring-category">Function</span>
-</header>
-<section style="display: none;"><div><pre><code class="language-julia hljs">function fit_ellipse(x, y)
-    M = hcat(x.^2, x.*y, y.^2, x, y)                            # quadratic form of ellipse
-    p = M\ones(length(x))                                       # fit parameters for the ellipse
-    A, B, C, D, E = p
-    F = -1.0
-    # calculate the parameters from quadratic
-    Δ = B^2 - 4*A*C
-    Λ = (A-C)^2 + B^2
-    b, a = [-sqrt(clamp( 2*(A*E^2 + C*D^2 - B*D*E + Δ*F)*
-            ( (A+C) + op(sqrt(Λ)) ), 0, Inf)) / Δ   for op in (+, -)]
-    θ = atan(-B, C-A)/2
-    c = [(2*C*D - B*E)/Δ, (2*A*E - B*D)/Δ]
-    return a, b, -θ+Base.π/2, c
-end</code><button class="copy-button fa-solid fa-copy" aria-label="Copy this code ;opblock" title="Copy"></button></pre></div>
-</section>
-</article><pre><code class="language-julia hljs">n = 15                                                          # number of points for fit : 2n
-n_ = 100                                                        # number of points for plot: 2n_
-p0 = [[[-1, i] for i ∈ range(-tf, 0, n)];                       # initial costate for fit
-      [[1, i] for i ∈ range(tf, 0, n)]]
-p0_ = [[[-1, i] for i ∈ range(-tf, 0, n_)];                     # initial costate for plot
-       [[1, i] for i ∈ range(tf, 0, n_)]]
+    s(a,b) = \left( \begin{array}{cc} a &amp; 0 \\ 0 &amp; b \end{array} \right),\]</p><p>and where <span>$\beta_0 = \arctan \left(\frac{a \sin(\theta)}{b \cos(\theta)} \right)$</span>. </p><details class="admonition is-details" id="Function-plot_ellipse-557b5363fbaf325a"><summary class="admonition-header">Function `plot_ellipse`<a class="admonition-anchor" href="#Function-plot_ellipse-557b5363fbaf325a" title="Permalink"></a></summary><div class="admonition-body"><pre><code class="language-julia hljs">function plot_ellipse(a,b,θ,c,φ,x)
+    # Generate data for the boundary of the accessible set
+    n_ = 100                                                            # Number of points for boundary
+    # Create initial costate values along the boundary
+    p0_ = [[[-1, i] for i ∈ range(-tf, 0, n_)];                         # Left side (p⁰ = -1)
+        [[1, i] for i ∈ range(tf, 0, n_)]]                              # Right side (p⁰ = 1)
+    x_ = zeros(2, 2*n_); p_ = zeros(2, 2*n_)                            # Initialize final state and costate arrays
+    # Compute flow for each initial costate to get the boundary
+    for i in eachindex(p0_)
+        x_[:,i], p_[:,i] = ϕ(t0, x0, p0_[i], tf)                        # Compute Hamiltonian flow
+    end
 
-x = zeros(2, 2*n); p = zeros(2,2*n)                             # init final state and costate
-x_ = zeros(2, 2*n_); p_ = zeros(2, 2*n_)
+    # Generate ellipse points
+    β = range(-Base.π, Base.π; length = 100)                            # Angle parameter for ellipse
+    # Compute ellipse points: rotate by -Θ, scale by (a,b), shift by center c
+    xₑ = r(-θ)*s(a,b)*
+        transpose(reduce(hcat,[sin.(β), cos.(β)])).+c                   # Ellipse boundary points
+
+    # Transform coordinates using the function ϕ
+    y = φ(x); y_ = φ(x_); yₑ = φ(xₑ)                                    # Apply transformation to all data
+
+    # Plot in original coordinates (x, x⁰)
+    plt_x = plot(x_[2,:], x_[1,:], label = nothing)                     # Accessible set boundary
+    scatter!(x[2,:], x[1,:], label=&quot;Observations&quot;, legend = :topleft)   # Data points
+    plot!(xₑ[2,:], xₑ[1,:], label = &quot;Fitted ellipse&quot;)                   # Fitted ellipse
+    plot!(xlim = [-15,15], ylim = [-15,15], xlabel = &quot;x&quot;, ylabel = &quot;x⁰&quot;)
+
+    # Plot in transformed coordinates (y, y⁰)
+    plt_y = plot(y_[2,:], y_[1,:], label = nothing)                     # Transformed boundary
+    scatter!(y[2,:], y[1,:], label=&quot;&quot;)                                  # Transformed observations
+    plot!(yₑ[2,:], yₑ[1,:], label = &quot;&quot;)                                 # Transformed ellipse
+    plot!( xlabel = &quot;y&quot;, ylabel = &quot;y⁰&quot;)
+
+    return plot(plt_x, plt_y, layout = (1,2), size=(800, 400))
+end</code></pre></div></details><p>This is done in the following code block</p><pre><code class="language-julia hljs"># Generate data points for ellipse fitting
+n = 15                                              # Number of sample points
+# Create initial costate values along the boundary (both sides)
+p0 = [[[-1, i] for i ∈ range(-tf, 0, n)];           # Left side (p⁰ = -1)
+      [[1, i] for i ∈ range(tf, 0, n)]]             # Right side (p⁰ = 1)
+
+# Compute final states and costates by computing the flow from different initial costates
+x = zeros(2, 2*n); p = zeros(2,2*n)                 # Initialize arrays
 for i = 1:length(p0)
-    x[:,i], p[:,i] = ϕ(t0, x0, p0[i], tf)                       # compute flow for fit
-end
-for i = 1:length(p0_)
-    x_[:,i], p_[:,i] = ϕ(t0, x0, p0_[i], tf)                    # compute flow for plot
+    x[:,i], p[:,i] = ϕ(t0, x0, p0[i], tf)           # Compute Hamiltonian flow
 end
 
-a, b, θ, c = fit_ellipse(x[1,:], x[2,:])                        # fit ellipse
-r(β) = [[cos(β), sin(β)] [-sin(β), cos(β)]]                     # 2x2 rotation matrix
-s(a,b) = [[a,0] [0,b]]                                          # 2x2 scale matrix
-β = range(-Base.π, Base.π; length = 100)                        # angle for plot ellipse
-xₑ = r(-θ)*s(a,b)*
-    transpose(reduce(hcat,[sin.(β), cos.(β)])).+c               # points of the ellipse
+# Fit ellipse to the accessible set boundary (see utils.jl)
+a, b, θ, c = fit_ellipse(x[1,:], x[2,:])            # a: semi-major, b: semi-minor, θ: rotation, c: center
 
-# construction of the linear diffeomorphism φ(x) = Ax + B
-d = (a*sin(θ))/(b*cos(θ)); β₀ = atan(d)                         # intermediate values
-A = r(-β₀)*s(1/a,1/b)*r(θ); B = -A*c                            # calculate A and B
-φ(x) = A*x .+ B                                                 # function φ
+# Helper matrices for coordinate transformation
+r(β) = [[cos(β), sin(β)] [-sin(β), cos(β)]]         # 2x2 rotation matrix
+s(a,b) = [[a,0] [0,b]]                              # 2x2 scaling matrix
 
-y = φ(x); y_ = φ(x_); yₑ = φ(xₑ)                                # compute φ on x, x_ and xₑ
+# Construct linear diffeomorphism φ(x) = A*x + B to normalize the ellipse to a circle
+d = (a*sin(θ))/(b*cos(θ)); β₀ = atan(d)             # Intermediate values for transformation
+A = r(-β₀)*s(1/a,1/b)*r(θ); B = -A*c                # Compute transformation matrices A and B
+φ(x) = A*x .+ B                                     # Diffeomorphism ϕ (affine transformation)
 
-# plot
-plt_x = plot(x_[2,:], x_[1,:], label = &quot;&quot;)
-scatter!(x[2,:], x[1,:], label=&quot;Observations&quot;, legend = :topleft)
-plot!(xₑ[2,:], xₑ[1,:], label = &quot;Fitted ellipse&quot;)
-plot!(xlim = [-15,15], ylim = [-15,15], xlabel = &quot;x&quot;, ylabel = &quot;x⁰&quot;)
-
-plt_y = plot(y_[2,:], y_[1,:], label = &quot;&quot;)
-scatter!(y[2,:], y[1,:], label=&quot;&quot;)
-plot!(yₑ[2,:], yₑ[1,:], label = &quot;&quot;)
-plot!( xlabel = &quot;y&quot;, ylabel = &quot;y⁰&quot;)
-
-plot(plt_x, plt_y, layout = (1,2), size=(800, 400))</code></pre><img src="2D-preconditioner-28f310c8.svg" alt="Example block output"/><p>The general shooting function <span>$T \colon \mathbb R^2 \to \mathbb R$</span> in the new coordinate is defined by </p><p class="math-container">\[    T(q) = A_{x_1} \varphi \big(t_0, x_0, p_0(A^\top q), t_f) + B_{x_1} - y_T,\]</p><p>where the function <span>$p_0 \colon \mathbb R^2 \to \mathbb R^2$</span> correspond to the mapping between the final and the initial augmented costate, and is given by</p><p class="math-container">\[    p_0(p^0, p_1) = (p^0, p_1 + p^0 t_f),\]</p><p>and <span>$y_T = A_{x_1} x_T + B_x$</span> to the target in the new system of coordinates. By using the definition of <span>$S$</span> and <span>$y_T$</span>, we obtain </p><p class="math-container">\[\begin{align*}
+# Visualize the fitted ellipse and transformation (see utils.jl)
+plot_ellipse(a, b, θ, c, φ, x)</code></pre><img src="2D-preconditioner-8b588cda.svg" alt="Example block output"/><p>The general shooting function <span>$T \colon \mathbb R^2 \to \mathbb R$</span> in the new coordinates is defined by </p><p class="math-container">\[    T(\hat q) = A_{x_1} \varphi \big(t_0, \hat x_0, \hat p_0(A^\top \hatq), t_f) + B_{x_1} - y_T,\]</p><p>where the function <span>$\hat p_0 \colon \mathbb R^2 \to \mathbb R^2$</span> corresponds to the mapping between the final and the initial augmented costate, and is given by</p><p class="math-container">\[    \hat p_0(p^0, p) = (p^0, p + p^0 t_f),\]</p><p>and <span>$y_T = A_{x_1} x_T + B_x$</span> is the target in the new system of coordinates. By using the definition of <span>$S$</span> and <span>$y_T$</span>, we obtain </p><p class="math-container">\[\begin{align*}
     T(q) &amp;= A_{x_1} \varphi \big(t_0, x_0, p_0(A^\top q), t_f) + B_{x_1} - (A_{x_1} x_T + B_{x_1}) \\
     &amp;= A_{x_1} (S \circ p_0)(A^\top q).
-\end{align*}\]</p><p>which highlight that the proposed geometric preconditioning method is a left and right side preconditioner of the shooting function. Finally, we define the two shooting functions <span>$T_1$</span> and <span>$T_2$</span> by using the two method of normalization used before for the function <span>$S$</span> </p><p class="math-container">\[    T_1(p) = T(-1, p) \qquad \text{and} \qquad T_2(p) = T \big(\eta(p), p \big).\]</p><pre><code class="language-julia hljs">p₀(p) = [p[1], p[2] + p[1]*tf]                                  # function p₀(⋅)
-Aₓ = A[2,2]; Bₓ = B[2]                                          # Aₓ and Bₓ
-yT = Aₓ*xT + Bₓ                                                 # target in the new coordinate
-T(q) = Aₓ*(S ∘ p₀)(transpose(A)*q)                              # state flow in the new coordinates
-T₁(q) = T([-1, q])                                              # normalization 1
-T₂(q) = abs(q) &lt; 1 ? T([η(q), q]) : sign(q)*(Aₓ*tf + Bₓ)        # normalization 2
+\end{align*}\]</p><p>which highlights that the proposed geometric preconditioning method is a left and right side preconditioner of the shooting function. Finally, we define the two shooting functions <span>$T_1$</span> and <span>$T_2$</span> by using the two methods of normalization used before for the function <span>$S$</span> </p><p class="math-container">\[    T_1(q) = T(-1, q) \qquad \text{and} \qquad T_2(q) = T \big(\eta(q), q \big).\]</p><p>The shooting functions <span>$T$</span>, <span>$T_1$</span> and <span>$T_2$</span> are plotted below:</p><pre><code class="language-julia hljs"># Transform shooting functions to new coordinates using the diffeomorphism
+p₀(p) = [p[1], p[2] + p[1]*tf]                                              # Inverse transformation for costate
+Aₓ = A[2,2]; Bₓ = B[2]                                                      # Extract relevant components for state
+yT = Aₓ*xT + Bₓ                                                             # Target state in new coordinates
 
-# Plot
-plt_S1 = plot(range(-3, 3, 500), T₁ , color = 2)
-plot!([-3,3], [yT,yT], color = :black)
-plot!(xlabel = &quot;q₀&quot;, ylabel = &quot;T₁&quot;, xlim = [-3,3], legend=false)
+# Preconditioned shooting function T in new coordinates
+T(q; xT=xT) = Aₓ*(S(p₀(transpose(A)*q); xT=xT))                             # General shooting function
+T₁(q; xT=xT) = T([-1, q]; xT=xT)                                            # Normalization 1: fix q⁰ = -1
+T₂(q; xT=xT) = abs(q) &lt; 1 ? T([η(q), q]; xT=xT) : sign(q)*(Aₓ*tf + Bₓ)      # Normalization 2: use function η to have |q|=1
 
-plt_S2 = plot(range(-1, 1, 500), T₂, color = 3)
-plot!([-1,1], [yT,yT], color = :black)
-plot!(xlabel = &quot;q₀&quot;, ylabel = &quot;T₂&quot;, xlim = [-1,1], legend=false)
-
-T_(q⁰, q) = T([q⁰, q])
-plt_S = surface(range(0, -1.5, 100), range(-3, 3, 100), T_, camera = (30,30))
-surface!(xlabel = &quot;q⁰&quot;, ylabel = &quot;q₀&quot;, zlabel = &quot;T&quot;, xflip = true)
-plot3d!(-1*ones(100), range(-3, 3, 100), T₁.(range(-3, 3, 100)), label = &quot;T₁&quot;)
-plot3d!(η.(range(-1, 1, 100)), range(-1, 1, 100), T₂.(range(-1, 1, 100)), label = &quot;T₂&quot;)
-
-plt_S12 = plot(plt_S1, plt_S2, layout = (1,2))
-plt_total = plot(plt_S, plt_S12, layout = grid(2,1, heights = [2/3, 1/3]), size=(700, 600))
-
+# Create animated 3D plot of transformed shooting functions
+plt = plot_shooting(T, T₁, T₂, :T)                                          # Plot in T coordinates
 @gif for i ∈ [range(30, 90, 50); 90*ones(25); range(90, 30, 50); 30*ones(25)]
-    plot!(plt_total[1], camera=(i,i),
+    plot!(plt[1], camera=(i,i),                                             # Rotate camera angle
         zticks = i==90 ? false : true,
         zlabel = i==90 ? &quot;&quot; : &quot;T&quot; )
-end</code></pre><img src="2D-preconditioner-0909cf42.gif" alt="Example block output"/><h1 id="Preconditioned-shoot"><a class="docs-heading-anchor" href="#Preconditioned-shoot">Preconditioned shoot</a><a id="Preconditioned-shoot-1"></a><a class="docs-heading-anchor-permalink" href="#Preconditioned-shoot" title="Permalink"></a></h1><pre><code class="language-julia hljs">global iterate_T2 = Vector{Float64}()                           # global vector to store iterates of the solver
+end</code></pre><img src="2D-preconditioner-5c8869f4.gif" alt="Example block output"/><h2 id="Preconditioned-shooting-method"><a class="docs-heading-anchor" href="#Preconditioned-shooting-method">Preconditioned shooting method</a><a id="Preconditioned-shooting-method-1"></a><a class="docs-heading-anchor-permalink" href="#Preconditioned-shooting-method" title="Permalink"></a></h2><p>We can find a zero of the shooting function <span>$T_2$</span> by using the same method as done for the function <span>$S_2$</span>. </p><pre><code class="language-julia hljs"># Global vector to store solver iterates for T₂ analysis
+global iterate_T2 = Vector{Float64}()
 
-function T₂!(t₂, ξ)                                             # intermediate function
+# Wrapper function for T₂ compatible with MINPACK solver (stores iterates)
+function T₂!(t₂, ξ; xT=xT)
      push!(iterate_T2, ξ[1])
-     return (t₂[:] .= T₂(ξ[1]); nothing)
+     return (t₂[:] .= T₂(ξ[1]; xT=xT); nothing)
 end
 
-JT₂(ξ) = ForwardDiff.jacobian(q0 -&gt; [T₂(q0[1])], ξ)             # compute jacobian by forward differentiation
-JT₂!(jt₂, ξ) = (jt₂[:] .= JT₂(ξ); nothing)                      # intermediate function
+# Jacobian of T₂ using automatic differentiation
+JT₂(ξ; xT=xT) = ForwardDiff.jacobian(q0 -&gt; [T₂(q0[1]; xT=xT)], ξ)
+# Wrapper for Jacobian compatible with MINPACK solver
+JT₂!(jt₂, ξ; xT=xT) = (jt₂[:] .= JT₂(ξ; xT=xT); nothing)
 
-ξ = [0.5]                                                       # initial guess
-q_sol = fsolve(T₂!, JT₂!, ξ, show_trace = true)                 # solve
-println(q_sol)                                                  # print solution</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Iter     f(x) inf-norm    Step 2-norm      Step time
-------   --------------   --------------   --------------
-     1     3.223430e-01     0.000000e+00         0.025740
-     2     7.034101e-02     1.406250e-01         5.414880
-     3     1.135104e-02     1.095650e-02         0.000307
-     4     1.033639e-04     4.056829e-04         0.000225
-     5     2.155037e-08     3.426092e-08         0.000242
-     6     6.012139e-16     1.489881e-15         0.000223
-     7     7.931703e-16     1.159579e-30         0.000223
-     8     3.000668e-15     1.979832e-29         0.000215
-     9     7.931703e-16     1.979832e-29         0.000590
-    10     3.000668e-15     1.979833e-29         0.000221
-    11     7.931703e-16     1.778954e-29         0.000223
-    12     1.081105e-15     1.219313e-29         0.000238
-    13     3.585676e-16     3.555421e-29         0.000222
-    14     6.012139e-16     1.534656e-30         0.000215
-    15     2.173013e-16     6.021771e-31         0.000213
-    16     2.173013e-16     3.049900e-32         0.000215
-    17     1.683624e-10     9.093524e-20         0.000238
-    18     3.585676e-16     9.093537e-20         0.000460
-    19     2.173013e-16     5.873024e-32         0.000213
-    20     2.104545e-11     1.420873e-21         0.000240
-    21     3.585676e-16     1.420891e-21         0.000220
-    22     2.173013e-16     5.873053e-32         0.000212
-    23     2.630790e-12     2.220234e-23         0.000212
-    24     3.585676e-16     2.220463e-23         0.000211
-    25     2.173013e-16     5.873415e-32         0.000238
-Results of Nonlinear Solver Algorithm
+ξ = [0.5]                                                   # Initial guess for solver
+q_sol = fsolve(T₂!, JT₂!, ξ, show_trace = true)             # Solve T₂(q) = 0 using MINPACK</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Results of Nonlinear Solver Algorithm
  * Algorithm: Modified Powell (User Jac, Expert)
  * Starting Point: [0.5]
  * Zero: [7.348247230204594e-15]
  * Inf-norm of residuals: 0.000000
  * Convergence: true
  * Message: iteration is not making good progress, measured by improvement from last 10 iterations
- * Total time: 5.446451 seconds
+ * Total time: 5.244138 seconds
  * Function Calls: 25
- * Jacobian Calls (df/dx): 3</code></pre><pre><code class="language-julia hljs">p0_sol = p₀(transpose(A)*[η(q_sol.x[1]), q_sol.x[1]])           # get the optimal initial costate in old coordinates
-sol = ϕ((t0, tf), x0, p0_sol, saveat=range(t0, tf, 500))        # get optimal trajectory
+ * Jacobian Calls (df/dx): 3</code></pre><p>One can easily retrieve the solution from the zero of <span>$T_2$</span>:</p><pre><code class="language-julia hljs"># Transform the solution back to original coordinates
+p0_sol = p₀(transpose(A)*[η(q_sol.x[1]), q_sol.x[1]])       # Convert optimal q back to original p coordinates
+sol = ϕ((t0, tf), x0, p0_sol, saveat=range(t0, tf, 500))    # Compute optimal trajectory in original coordinates
 
-# plot
-t = sol.t
-x⁰ = [sol.u[i][1] for i in 1:length(sol.u)]
-x  = [sol.u[i][2] for i in 1:length(sol.u)]
-p⁰ = [sol.u[i][3] for i in 1:length(sol.u)]
-p  = [sol.u[i][4] for i in 1:length(sol.u)]
-u = sign.(p)
+# Plot the optimal solution
+plot_sol(sol)</code></pre><img src="2D-preconditioner-1487b617.svg" alt="Example block output"/><h1 id="Comparison"><a class="docs-heading-anchor" href="#Comparison">Comparison</a><a id="Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Comparison" title="Permalink"></a></h1><p>It is shown in [mettre article] that if the boundary of the augmented accessible set is the fitted ellipse then the shooting function <span>$T_2$</span> corresponds to the identity function. Due to the error of the approximation, the function <span>$T_2$</span> is not the identity, but we hope that this function is close to this ideal function, and therefore the convergence of <span>$T_2$</span> is faster than the one of <span>$S_2$</span>. </p><details class="admonition is-details" id="Code-to-compare-convergence-8f46edb13b406b29"><summary class="admonition-header">Code to compare convergence<a class="admonition-anchor" href="#Code-to-compare-convergence-8f46edb13b406b29" title="Permalink"></a></summary><div class="admonition-body"><p>The code below compares the convergence of these two shooting functions, and provides the following plot.</p><pre><code class="language-julia hljs"># ============================================================================
+# CONVERGENCE ANALYSIS: Compare S₂ and T₂ shooting methods
+# ============================================================================
 
-plt_x⁰ = plot(t, x⁰, label = &quot;x⁰&quot;)
-plt_x  = plot(t, x , label = &quot;x&quot; )
-plt_p⁰ = plot(t, p⁰, label = &quot;p⁰&quot;, ylim=[-1,1])
-plt_p  = plot(t, p , label = &quot;p&quot; )
-plt_u  = plot(t, u,  label = &quot;u&quot; )
+# Discretize the accessible final state range
+global xT = 0;
+q0_span = range(-1, 1, length=10000)                    # Range of q₀ values
+T2_span = [T₂(q) for q ∈ q0_span]                       # Compute T₂ over the range
+ε = 0.2                                                 # Tolerance for boundary selection
+i1 = findfirst(x -&gt; x &gt; T2_span[1]+ε , T2_span)         # Find start index
+i2 = findlast(x -&gt; x &lt; T2_span[end]-ε, T2_span)         # Find end index
 
-plt_xp = plot(plt_x⁰, plt_p⁰, plt_x, plt_p, layout=(2, 2))
-plot(plt_xp, plt_u, layout = grid(2,1, heights = [2/3, 1/3]), size=(700, 600))</code></pre><img src="2D-preconditioner-d12bee0c.svg" alt="Example block output"/><h1 id="Comparison"><a class="docs-heading-anchor" href="#Comparison">Comparison</a><a id="Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Comparison" title="Permalink"></a></h1><p>It is shown in [mettre article] that if the boundary of augmented accessible set is the fitted ellipse then the shooting function <span>$T_2$</span> is the identity function. Due to the error of the approximation, the function <span>$T_2$</span> is not the identity, but we hope that this function is close to this ideal function, and so that the convergence of <span>$T_2$</span> is faster than the one of <span>$S_2$</span>. </p><p>The following code compares the convergence of these two shooting function. We also study for these functions the domain of initial guesses for the solver that hit the bounds <span>$[-1, 1]$</span> during the solving process. </p><pre><code class="language-julia hljs">## initial guesses
-N = 1000; ξ = range(-1.,1.,N)
+N = 1000                                                # Number of test points
+sol_T2 = range(q0_span[i1], q0_span[i2], length=N)      # q₀ values for testing
+# Convert to corresponding p₀ values in original coordinates
+sol_S2 = [((p₀(transpose(A)*[η(q), q]))/(norm(p₀(transpose(A)*[η(q), q]), 2)))[2]  for q ∈ sol_T2]
 
-# initialization of the matrix
-fnorms_S2 = zeros(N, 100); fnorms_T2 = zeros(N, 100)
-fnorms_T2_in_x = zeros(N, 100)
-iterates_S2 = zeros(N, 100); iterates_T2 = zeros(N, 100)
-conv_S2 = zeros(N,1); conv_T2 = zeros(N,1)
-#-1 : not converged; 1 converged; 0: converged but hit bounds
+xT_span = [S₂(p) for p ∈ sol_S2]                        # Target states for S₂
+yT_span = [T₂(q) for q ∈ sol_T2]                        # Target states for T₂
 
-# intermediate function to get value of S from T iterates
+# Initialize storage arrays for convergence analysis
+fnorms_S2 = zeros(N, 100)                               # Norm of S₂ at each iteration
+fnorms_T2 = zeros(N, 100)                               # Norm of T₂ at each iteration (in x-space)
+fnorms_T2_IG = zeros(N,100)                             # Norm of T₂ at each iteration (in x-space), with natural initial guess
+iterates_S2 = zeros(N, 100)                             # Iterates of S₂
+iterates_T2 = zeros(N, 100)                             # Iterates of T₂
+iterates_T2_IG = zeros(N, 100)                          # Iterates of T₂ with natural initial guess
+# Convergence status: -1=not converged, 1=converged, 0=converged but hit bounds
+conv_S2 = zeros(N,1)                                    # Convergence status of S₂
+conv_T2 = zeros(N,1)                                    # Convergence status of T₂
+conv_T2_IG = zeros(N,1)                                 # Convergence status of T₂ with natural initial guess
+
+# Intermediate function: compute S value from T iterates (for error comparison)
 T₂_(q0) = abs(q0) &lt; 1 ? S(p₀(transpose(A)*[η.(q0),q0])) : sign(q0) * tf - xT
 
+# Main loop: test convergence for N different target states
 for i = 1:N
-    # remove old iterates
-    global iterate_S2 = Vector{Float64}()
-    global iterate_T2 = Vector{Float64}()
+    # Set current target state
+    global xT = xT_span[i]
 
-    # solve
-    q_sol_S2 = fsolve(S₂!, JS₂!, [ξ[i]], show_trace = false, tracing = true)
-    q_sol_T2 = fsolve(T₂!, JT₂!, [ξ[i]], show_trace = false, tracing = true)
-
-    # store results is converged
+    ### Test S₂ (original shooting function) ###
+    global iterate_S2 = Vector{Float64}()                                               # Clear old iterates
+    q_sol_S2 = fsolve(S₂!, JS₂!, [-0.75], show_trace = false, tracing = true)           # Solve with fixed initial guess
     if q_sol_S2.converged
         fnorm_S2 = [q_sol_S2.trace.trace[j].fnorm for j ∈ 1:length(q_sol_S2.trace.trace)]
         iterates_S2[i,1:length(iterate_S2)] = iterate_S2
-        conv_S2[i] = length(findall(x-&gt; abs(x) &gt; 1, iterate_S2)) == 0
+        conv_S2[i] = length(findall(x-&gt; abs(x) &gt; 1, iterate_S2)) == 0           
         fnorms_S2[i,1:length(fnorm_S2)] = fnorm_S2
     else
-        conv_S2[i] = -1
+        conv_S2[i] = -1                                                                 # Not converged
     end
+
+    ### Test T₂ (transformed shooting function) ###
+    global iterate_T2 = Vector{Float64}()                                               # Clear old iterates
+    q_sol_T2 = fsolve(T₂!, JT₂!, [0.0], show_trace = false, tracing = true)             # Solve with fixed initial guess
     if q_sol_T2.converged
-        fnorm_T2 = [q_sol_T2.trace.trace[j].fnorm for j ∈ 1:length(q_sol_T2.trace.trace)]
         iterates_T2[i,1:length(iterate_T2)] = iterate_T2
         conv_T2[i] = length(findall(x-&gt; abs(x) &gt; 1, iterate_T2)) == 0
-        fnorms_T2[i,1:length(fnorm_T2)] = fnorm_T2
-        fnorms_T2_in_x[i, 1:length(iterate_T2)] = abs.(T₂_.(iterate_T2))
+        fnorms_T2[i, 1:length(iterate_T2)] = abs.(T₂_.(iterate_T2))
     else
-        conv_T2[i] = -1
+        conv_T2[i] = -1                                                                 # Not converged
+    end
+
+    ### Test T₂ with natural initial guess ###
+    global iterate_T2 = Vector{Float64}()                                               # Clear old iterates
+    q_sol_T2_IG = fsolve(T₂!, JT₂!, [yT_span[i]], show_trace = false, tracing = true)   # Solve with target as initial guess
+    if q_sol_T2_IG.converged
+        iterates_T2_IG[i,1:length(iterate_T2)] = iterate_T2
+        conv_T2_IG[i] = length(findall(x-&gt; abs(x) &gt; 1, iterate_T2)) == 0
+        fnorms_T2_IG[i, 1:length(iterate_T2)] = abs.(T₂_.(iterate_T2))
+    else
+        conv_T2_IG[i] = -1                               # Not converged
     end
 end
 
-# mean
+# Print convergence statistics
+println(&quot;Convergence rates:&quot;)
+println(&quot;S₂: &quot;, 100*(1-length(findall(x -&gt; x == -1, conv_S2))/N), &quot; %&quot;)
+println(&quot;T₂: &quot;, 100*(1-length(findall(x -&gt; x == -1, conv_T2))/N), &quot; %&quot;)
+println(&quot;T₂ with natural initial guess: &quot;, 100*(1-length(findall(x -&gt; x == -1, conv_T2_IG))/N), &quot; %&quot;)
+
+# Compute mean error norms across all test cases
 mean_fnorms_S2 = mean(fnorms_S2, dims = 1)
 mean_fnorms_T2 = mean(fnorms_T2, dims = 1)
-mean_fnorms_T2_in_x = mean(fnorms_T2_in_x, dims = 1)
+mean_fnorms_T2_IG = mean(fnorms_T2_IG, dims = 1)
 
-# remove zeros with tolerance ε
+# Remove trailing zeros (beyond convergence) with tolerance
 ε = 1e-9;
 mean_fnorms_S2 = mean_fnorms_S2[1:findall(x -&gt; x &lt; ε, mean_fnorms_S2)[1][2]]
 mean_fnorms_T2 = mean_fnorms_T2[1:findall(x -&gt; x &lt; ε, mean_fnorms_T2)[1][2]]
-mean_fnorms_T2_in_x = mean_fnorms_T2_in_x[1:findall(x -&gt; x &lt; ε, mean_fnorms_T2_in_x)[1][2]]
+mean_fnorms_T2_IG = mean_fnorms_T2_IG[1:findall(x -&gt; x &lt; ε, mean_fnorms_T2_IG)[1][2]]
 
-# plots
-plt_1 = plot(0:length(mean_fnorms_S2)-1, mean_fnorms_S2, label = &quot;S₂&quot;)
-plot!(0:length(mean_fnorms_T2)-1, mean_fnorms_T2, label = &quot;T₂&quot;)
-plot!(0:length(mean_fnorms_T2_in_x)-1, mean_fnorms_T2_in_x, label = &quot;T₂ in x&quot;)
-plot!(yaxis = :log10, xlim = [0, 30], ylim = [ε, 10], xlabel = &quot;Error&quot;, ylabel = &quot;Iterations&quot;)
+# Plot 1: Convergence rate comparison (log scale)
+plt1 = plot(0:length(mean_fnorms_S2)-1, mean_fnorms_S2, label = &quot;S₂&quot;, lw = 3)
+plot!(plt1, 0:length(mean_fnorms_T2)-1, mean_fnorms_T2, label = &quot;T₂&quot;, lw = 3)
+plot!(plt1, 0:length(mean_fnorms_T2_IG)-1, mean_fnorms_T2_IG, label = &quot;T₂ with IG&quot;, lw = 3)
+plot!(plt1, yaxis = :log10, xlim = [0, 30], ylim = [ε, 10], xlabel = &quot;Iterations&quot;, ylabel = &quot;Error&quot;)
 
-plt_21 = plot(ξ, S₂, color = :black, label = &quot;&quot;)
+global xT = 0;
+
+# Plot 2: Convergence regions visualization
+plt21 = plot(xlim = [-1,1], xlabel = &quot;p₀&quot;, title = &quot;S₂&quot;)
+plot!(plt21, S₂, c = :black, label = nothing)
+# Color code: green=converged, blue=converged but hit bounds, red=not converged
 color = [conv_S2[i]==1 ? :green : conv_S2[i] == 0 ? :blue : :red for i ∈ 1:N]
-scatter!(ξ, S₂, color = color, markerstrokecolor = color, marker = 2, label =&quot;&quot;)
-plot!([-1,1], [xT,xT], color = :black, label = &quot;&quot;)
-plot!(xlabel = &quot;p₀&quot;, ylabel = &quot;S₂&quot;, label = &quot;&quot;)
+scatter!(sol_S2, xT_span, color = color, markerstrokecolor = color, marker = 2, label =nothing)
+plot!(plt21, [-0.75, -0.75], [-5, 5], c = :black, ls = :dash, label = nothing)  # Initial guess line
 
-plt_22 = plot(ξ, T₂, color = :black, label = &quot;&quot;)
+plt22 = plot(xlim = [-1,1], xlabel = &quot;q₀&quot;, title = &quot;T₂&quot;)
+plot!(plt22, T₂, c = :black, label = nothing)
 color = [conv_T2[i]==1 ? :green : conv_T2[i] == 0 ? :blue : :red for i ∈ 1:N]
-scatter!(ξ, T₂, markercolor = color, markerstrokecolor = color, marker = 2, label = &quot;&quot;)
-plot!([-1,1], [yT,yT], color = :black, label = &quot;&quot;)
-plot!(xlabel = &quot;q₀&quot;, ylabel = &quot;T₂&quot;, label = &quot;&quot;)
-scatter!(1,1, markercolor = :green, markerstrokecolor = :green, marker = 2, label = &quot;converged&quot;)
-scatter!(1,1, markercolor = :blue, markerstrokecolor = :blue, marker = 2, label = &quot;converged but hit bounds&quot;)
-scatter!(1,1, markercolor = :red, markerstrokecolor = :red, marker = 2, label = &quot;not converged&quot;)
+scatter!(plt22, sol_T2, yT_span, color = color, markerstrokecolor = color, marker = 2, label = &quot;&quot;)
+plot!(plt22, [0, 0], [T2_span[1], T2_span[end]], c = :black, ls = :dash, label = nothing)  # Initial guess line
 
-plt_2 = plot(plt_21, plt_22, layout = (1,2))
-plot(plt_1, plt_2, layout = grid(2,1, heights = [0.5, 0.5]), size=(700, 600))</code></pre><img src="2D-preconditioner-b3d762cc.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="2D-example.html">« Indirect shooting</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 21 April 2026 15:18">Tuesday 21 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+plt23 = plot(xlim = [-1,1], xlabel = &quot;q₀&quot;, title = &quot;T₂ with IG&quot;)
+plot!(plt23, T₂, c = :black, label = nothing)
+color = [conv_T2_IG[i]==1 ? :green : conv_T2_IG[i] == 0 ? :blue : :red for i ∈ 1:N]
+scatter!(plt23, sol_T2, yT_span, color = color, markerstrokecolor = color, marker = 2, label = &quot;&quot;)
+plot!(plt23, [-1, 1], [-1, 1], c = :black, ls = :dash, label = nothing)  # Natural initial guess line
+
+# Add legend
+scatter!(plt21, 1,1, color = :green, markerstrokecolor = :green, marker = 2, label = &quot;converged&quot;)
+scatter!(plt21, 1,1, color = :blue, markerstrokecolor = :blue, marker = 2, label = &quot;converged but HB&quot;)
+scatter!(plt21, 1,1, color = :red, markerstrokecolor = :red, marker = 2, label = &quot;not converged&quot;)
+
+# Combine plots
+plt2 = plot(plt21, plt22, plt23, layout = grid(1,3, widths = [0.30, 0.35, 0.35]))
+plot(plt1, plt2, layout = grid(2,1, heights = [0.5, 0.5]), size=(800, 800)) </code></pre></div></details></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="2D-example.html">« Indirect shooting</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 22 April 2026 13:28">Wednesday 22 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
