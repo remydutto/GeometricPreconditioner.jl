@@ -19,7 +19,7 @@ end
 
 The goal is to solve this toy problem using the indirect method. Particular attention is given to the computation of the Jacobian of the well-known shooting function, which is not straightforward due to the non-differentiability of the flow with respect to the initial costate.
 
-Let us start by importing the package
+Let us start by importing the packages
 
 ```@example main
 using OptimalControl                            # for optimal control
