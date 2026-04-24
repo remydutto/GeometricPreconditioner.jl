@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Introduction · Geometric preconditioner</title><meta name="title" content="Introduction · Geometric preconditioner"/><meta property="og:title" content="Introduction · Geometric preconditioner"/><meta property="twitter:title" content="Introduction · Geometric preconditioner"/><meta name="description" content="Documentation for Geometric preconditioner."/><meta property="og:description" content="Documentation for Geometric preconditioner."/><meta property="twitter:description" content="Documentation for Geometric preconditioner."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="https://control-toolbox.org/assets/css/documentation.css" rel="stylesheet" type="text/css"/><script src="https://control-toolbox.org/assets/js/documentation.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Geometric preconditioner</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href="index.html">Introduction</a><ul class="internal"><li><a class="tocitem" href="#Reproducibility"><span>Reproducibility</span></a></li></ul></li><li><a class="tocitem" href="2D-example.html">Indirect shooting</a></li><li><a class="tocitem" href="2D-preconditioner.html">Geometric preconditioner</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="index.html">Introduction</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="index.html">Introduction</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl/blob/main/docs/src/index.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Optimal-control-problem"><a class="docs-heading-anchor" href="#Optimal-control-problem">Optimal control problem</a><a id="Optimal-control-problem-1"></a><a class="docs-heading-anchor-permalink" href="#Optimal-control-problem" title="Permalink"></a></h1><p>We consider the following optimal control problem </p><p class="math-container">\[    \left\{ \begin{array}{ll}
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Introduction · Geometric preconditioner</title><meta name="title" content="Introduction · Geometric preconditioner"/><meta property="og:title" content="Introduction · Geometric preconditioner"/><meta property="twitter:title" content="Introduction · Geometric preconditioner"/><meta name="description" content="Documentation for Geometric preconditioner."/><meta property="og:description" content="Documentation for Geometric preconditioner."/><meta property="twitter:description" content="Documentation for Geometric preconditioner."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="https://control-toolbox.org/assets/css/documentation.css" rel="stylesheet" type="text/css"/><script src="https://control-toolbox.org/assets/js/documentation.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">Geometric preconditioner</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href="index.html">Introduction</a><ul class="internal"><li><a class="tocitem" href="#Optimal-control-problem"><span>Optimal control problem</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li><li><a class="tocitem" href="#Reproducibility"><span>Reproducibility</span></a></li></ul></li><li><a class="tocitem" href="2D-example.html">Indirect shooting</a></li><li><a class="tocitem" href="2D-preconditioner.html">Geometric preconditioner</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="index.html">Introduction</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="index.html">Introduction</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/remydutto/GeometricPreconditioner.jl/blob/main/docs/src/index.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><p>The goal of this application is to improve the convergence of indirect shooting method for solving optimal control problems. The indirect shooting method is a powerful technique for solving optimal control problems via the Pontryagin Maximum Principle, but it often suffers from poor convergence properties due to the sensitivity of the shooting function.</p><p>The first part focus on the proper implementation of the indirect shooting method. A critical aspect of the shooting method is the computation of the Jacobian of the shooting function, which is required by Newton-type solvers. The automatic differentiation can be used to compute this Jacobien, but some implementation choices can lead to a false result.</p><p>The second part introduced a geometric preconditioning approach to improve the convergence of the indirect shooting method.  The core idea is to transform the boundary value problem into a coordinate system that aligns with the natural structure of the problem. The comparison between the standard and preconditioned methods will be presented, and will highlight the benefit of using the geometric preconditioned shooting function.</p><h2 id="Optimal-control-problem"><a class="docs-heading-anchor" href="#Optimal-control-problem">Optimal control problem</a><a id="Optimal-control-problem-1"></a><a class="docs-heading-anchor-permalink" href="#Optimal-control-problem" title="Permalink"></a></h2><p>We consider in this application the following toy optimal control problem </p><p class="math-container">\[    \left\{ \begin{array}{ll}
     \displaystyle \min_{x,u} \int_{t_0}^{t_f} x(t) ~\mathrm dt \\[1em]
     \text{s.c.}~\dot x(t) = u(t), &amp; t\in [t_0, t_f]~\mathrm{a.e.}, \\[0.5em]
     \phantom{\mathrm{s.c.}~} u(t) \in [-1,1], &amp; t\in [t_0, t_f], \\[0.5em]
     \phantom{\mathrm{s.c.}~} x(t_0) = x_0, \quad x(t_f) = x_f,
-    \end{array} \right.\]</p><p>with <span>$x_0$</span>, <span>$t_0$</span>, <span>$x_f$</span> and <span>$t_f$</span> fixed. This problem is simple, and can be analytically solve without the use of numerical method. However, the goal is to solve this problem by indirect shooting.  </p><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
+    \end{array} \right.\]</p><p>with <span>$x_0$</span>, <span>$t_0$</span>, <span>$x_f$</span> and <span>$t_f$</span> fixed. This problem is simple, and can be analytically solve without the use of numerical method. However, the goal is to solve this problem by indirect shooting.  </p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[mettre article]</li><li>Olivier Cots, Rémy Dutto, Sophie Jan, Serge Laporte (2024). <a href="https://www.sciencedirect.com/science/article/pii/S2405896324018950">Geometric preconditioner for indirect shooting and application to hybrid vehicle</a>. <em>4th IFAC MICNON Conference</em>.</li><li>Rémy Dutto (2024). <a href="https://hal.science/tel-04792906v1">Méthode à deux niveaux et préconditionnement géométrique en contrôle optimal. Application au problème de répartition de couple des véhicules hybrides électriques</a>. <em>Thèse de doctorat, Université de Toulouse</em>.</li></ul><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
 <ul>
 <li><p>📦 <a href="assets/./Project.toml">Project.toml</a> - Package dependencies</p>
 </li>
@@ -17,9 +17,9 @@ Build Info:
   Official https://julialang.org release
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
-  CPU: 4 × AMD EPYC 7763 64-Core Processor
+  CPU: 4 × Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz
   WORD_SIZE: 64
-  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)
+  LLVM: libLLVM-18.1.7 (ORCJIT, icelake-server)
   GC: Built with stock GC
 Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)
 Environment:
@@ -29,7 +29,7 @@ Environment:
   [f6369f11] ForwardDiff v1.3.3
   [4fb4c77a] GeometricPreconditioner v0.4.0 `~/work/GeometricPreconditioner.jl/GeometricPreconditioner.jl`
   [4854310b] MINPACK v1.3.0
-  [5f98b655] OptimalControl v2.0.3
+  [5f98b655] OptimalControl v2.0.4
   [91a5bcdd] Plots v1.41.6</code></pre></details><details style="margin-bottom: 0.5em;"><summary>📚 Complete manifest</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/GeometricPreconditioner.jl/GeometricPreconditioner.jl/docs/Manifest.toml`
   [54578032] ADNLPModels v0.8.13
   [47edcb42] ADTypes v1.21.0
@@ -46,20 +46,20 @@ Environment:
   [aae01518] BandedMatrices v1.11.0
   [d1d4a3ce] BitFlags v0.1.9
   [62783981] BitTwiddlingConvenienceFunctions v0.1.6
-  [764a87c0] BoundaryValueDiffEq v5.20.0
-  [7227322d] BoundaryValueDiffEqAscher v1.12.0
-  [56b672f2] BoundaryValueDiffEqCore v2.2.0
-  [85d9eb09] BoundaryValueDiffEqFIRK v1.13.0
-  [1a22d4ce] BoundaryValueDiffEqMIRK v1.13.0
-  [9255f1d6] BoundaryValueDiffEqMIRKN v1.12.0
-  [ed55bfe0] BoundaryValueDiffEqShooting v1.13.0
+  [764a87c0] BoundaryValueDiffEq v5.21.0
+  [7227322d] BoundaryValueDiffEqAscher v1.13.0
+  [56b672f2] BoundaryValueDiffEqCore v2.3.1
+  [85d9eb09] BoundaryValueDiffEqFIRK v1.14.0
+  [1a22d4ce] BoundaryValueDiffEqMIRK v1.14.0
+  [9255f1d6] BoundaryValueDiffEqMIRKN v1.13.0
+  [ed55bfe0] BoundaryValueDiffEqShooting v1.14.0
   [70df07ce] BracketingNonlinearSolve v1.12.1
   [fa961155] CEnum v0.5.0
   [2a0fbf3d] CPUSummary v0.2.7
   [54762871] CTBase v0.18.7
-  [790bbbee] CTDirect v1.0.10
+  [790bbbee] CTDirect v1.0.11
   [1c39547c] CTFlows v0.8.25
-  [34c4fa32] CTModels v0.10.0
+  [34c4fa32] CTModels v0.10.1
   [32681960] CTParser v0.8.15
   [d3e8d392] CTSolvers v0.4.16
   [d360d2e6] ChainRulesCore v1.26.1
@@ -113,7 +113,7 @@ Environment:
   [1fa38f19] Format v1.3.7
   [f6369f11] ForwardDiff v1.3.3
   [069b7b12] FunctionWrappers v1.1.3
-  [77dc65aa] FunctionWrappersWrappers v1.7.0
+  [77dc65aa] FunctionWrappersWrappers v1.8.0
   [46192b85] GPUArraysCore v0.2.0
   [28b8d3ca] GR v0.73.24
   [c145ed77] GenericSchur v0.5.6
@@ -173,13 +173,13 @@ Environment:
   [9a2c21bd] NonlinearSolveQuasiNewton v1.13.1
   [26075421] NonlinearSolveSpectralMethods v1.7.1
   [4d8831e6] OpenSSL v1.6.1
-  [5f98b655] OptimalControl v2.0.3
-  [bca83a33] OptimizationBase v5.1.0
+  [5f98b655] OptimalControl v2.0.4
+  [bca83a33] OptimizationBase v5.1.1
   [bac558e1] OrderedCollections v1.8.1
   [1dea7af3] OrdinaryDiffEq v6.111.0
   [89bda076] OrdinaryDiffEqAdamsBashforthMoulton v1.11.0
   [6ad6398a] OrdinaryDiffEqBDF v1.26.0
-⌅ [bbf590c4] OrdinaryDiffEqCore v3.33.0
+⌅ [bbf590c4] OrdinaryDiffEqCore v3.33.1
   [50262376] OrdinaryDiffEqDefault v1.14.0
   [4302a76b] OrdinaryDiffEqDifferentiation v2.9.0
   [9286f039] OrdinaryDiffEqExplicitRK v1.12.0
@@ -199,7 +199,7 @@ Environment:
   [5b33eab2] OrdinaryDiffEqPRK v1.10.0
   [04162be5] OrdinaryDiffEqQPRK v1.10.0
   [af6ede74] OrdinaryDiffEqRKN v1.12.0
-  [43230ef6] OrdinaryDiffEqRosenbrock v1.31.0
+  [43230ef6] OrdinaryDiffEqRosenbrock v1.31.1
   [2d112036] OrdinaryDiffEqSDIRK v1.14.0
   [669c94d9] OrdinaryDiffEqSSPRK v1.14.0
   [e3e12d00] OrdinaryDiffEqStabilizedIRK v1.14.0
@@ -262,7 +262,7 @@ Environment:
   [82ae8749] StatsAPI v1.8.0
   [2913bbd2] StatsBase v0.34.10
   [4c63d2b9] StatsFuns v1.5.2
-  [9672c7b4] SteadyStateDiffEq v2.10.0
+  [9672c7b4] SteadyStateDiffEq v2.10.1
   [789caeaf] StochasticDiffEq v6.102.0
   [19c5a474] StochasticDiffEqCore v1.1.0
   [0520c28c] StochasticDiffEqHighOrder v1.1.0
@@ -276,7 +276,7 @@ Environment:
   [49714585] StochasticDiffEqRODE v1.1.0
   [af2a2fcd] StochasticDiffEqWeak v1.1.0
   [7792a7ef] StrideArraysCore v0.5.8
-  [ec057cc2] StructUtils v2.7.2
+  [ec057cc2] StructUtils v2.8.0
   [c3572dad] Sundials v5.3.0
   [2efcf032] SymbolicIndexingInterface v0.3.46
   [62fd8b95] TensorCore v0.1.1
@@ -293,8 +293,8 @@ Environment:
   [83423d85] Cairo_jll v1.18.6+0
   [ee1fde0b] Dbus_jll v1.16.2+0
   [2702e6a9] EpollShim_jll v0.0.20230411+1
-  [2e619515] Expat_jll v2.7.3+0
-  [b22a6f82] FFMPEG_jll v8.0.1+1
+  [2e619515] Expat_jll v2.7.5+0
+  [b22a6f82] FFMPEG_jll v8.1.0+0
   [a3f928ae] Fontconfig_jll v2.17.1+0
   [d7e528f0] FreeType2_jll v2.14.3+1
   [559328eb] FriBidi_jll v1.0.17+0
@@ -429,4 +429,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.7.0+0
-Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="2D-example.html">Indirect shooting »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 22 April 2026 14:28">Wednesday 22 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="2D-example.html">Indirect shooting »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 24 April 2026 10:17">Friday 24 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
