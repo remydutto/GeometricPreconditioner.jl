@@ -1,4 +1,3 @@
-# Indirect method
 
 ```@setup main
 using MINPACK

@@ -15,7 +15,9 @@ function fsolve(f, x; kwargs...)
 end
 ```
 
-The goal is now to improve the convergence of the indirect shooting method, by using a geometric preconditioner of the shooting function.
+The goal is now to improve the convergence of the indirect shooting method, by using a geometric preconditioner of the shooting function. The classical shooting method suffers from poor convergence properties, and one need to provide a good initial guess for the costate. The geometric preconditioning approach transforms the boundary value problem into a coordinate system that aligns with a natural structure, which significantly improve the convergence rate of the shooting method.
+
+The key idea is to approach the augmented accessible set by an ellipse, in order to propose a linear diffeomorphism that trasnform this ellipse into the unit circle. This diffeomorphism is then used to precondition the shooting function, which improves the convergence rate of the shooting method. For more information about this method, please see [insert article].
 
 Let us start by importing the packages
 
@@ -107,7 +109,7 @@ The general shooting function ``S \colon \mathbb R^2 \to \mathbb R`` associated 
 
 where ``\pi_x(x^0, x, p^0, p) = x`` is still the state projection. 
 
-We are interested in two normalizations of this shooting function, thanks to the homogeneity of the BC-extremals on the augmented costate, which are 
+We are interested in two normalizations of this shooting function which leads to the two following shooting functions 
 
 ```math
     S_1(p_0) = S(-1, p_0) \qquad \text{and} \qquad S_2(p_0) = S \big( \eta(p_0), p_0 \big)
@@ -148,7 +150,7 @@ plt = plot_shooting(S, S₁, S₂, :S)                                          
 end
 ```
 
-As done in the last section, we can use the solver `hybrd1` from the `MINPACK.jl` package to find a zero of the shooting function ``S_2``.
+We can use the solver `hybrd1` from the `MINPACK.jl` package to find a zero of the shooting function ``S_2``.
 
 ```@example main
 # Global vector to store solver iterates
@@ -366,7 +368,7 @@ sol = ϕ((t0, tf), x0, p0_sol, saveat=range(t0, tf, 500))    # Compute optimal t
 plot_sol(sol)
 ```
 
-# Comparison 
+## Comparison 
 
 It is shown in [mettre article] that if the boundary of the augmented accessible set is the fitted ellipse then the shooting function ``T_2`` is defined by
 
@@ -518,3 +520,9 @@ The code below compare the convergence of function ``T_2`` and ``S_2``, and the 
 ```@example main 
 plt
 ```
+
+The comparison results clearly demonstrate the effectiveness of the geometric preconditioning approach. First of all, the classical shooting method (with the function ``S_2``) achieves a convergence rate of 73.8%, with significant regions of the parameter space where the method fails to converge (red points in the visualization).
+
+In contrast, the geometric preconditioned shooting method (with the function ``T_2``) achieves a convergence rate of 100% across all tested initial conditions. The geometric transformation reparameterizes the problem in a coordinate system that aligns with the natural structure of the boundary value problem, making it significantly more robust and reliable.
+
+Furthermore, the advantage of using a natural initial guess is evident when comparing T₂ with T₂ with IG. While both methods achieve 100% convergence, the natural initial guess (using the target state as the starting point) provides additional robustness and can further accelerate convergence in practice.
